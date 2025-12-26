@@ -1,72 +1,52 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getFirestore, collection, getDocs, orderBy, query }
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyChrKBpyRSLhkmVMy3c1gdWBp4_grrrphA",
-  authDomain: "boardques.firebaseapp.com",
-  projectId: "boardques",
-  storageBucket: "boardques.firebasestorage.app",
-  messagingSenderId: "496679352856",
-  appId: "1:496679352856:web:1d62a3a23b7fec669ce16d"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
+// articleGrid element
 const articleGrid = document.getElementById("articleGrid");
 
-function formatDate(timestamp) {
-  const date = timestamp.toDate();
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric"
-  });
-}
-
 async function loadArticles() {
-  const q = query(collection(db, "articles"), orderBy("date", "desc"));
-  const snapshot = await getDocs(q);
+  articleGrid.innerHTML = "Loading...";
 
-  articleGrid.innerHTML = "";
+  try {
+    const snapshot = await getDocs(collection(db, "articles"));
+    articleGrid.innerHTML = "";
 
-  snapshot.forEach(doc => {
-    const data = doc.data();
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
 
-    articleGrid.innerHTML += `
-      <a href="#">
+      const a = document.createElement("a");
+      a.href = "#"; // future: article link
+
+      a.innerHTML = `
         <article class="card">
           <div class="card-img">
             <img src="${data.image}" alt="${data.title}">
-            <span class="badge ${data.board.toLowerCase()}-badge">
-              ${data.board.toUpperCase()}
-            </span>
+            <span class="badge">${data.category}</span>
           </div>
-
           <div class="card-body">
             <div class="meta-info">
               <span class="category">${data.category}</span>
-              <span class="date">${formatDate(data.date)}</span>
+              <span class="date">${new Date(data.date.seconds * 1000).toLocaleDateString()}</span>
             </div>
-
             <h3>${data.title}</h3>
-            <p>${data.summary}</p>
-
+            <p>${data.content.substring(0, 120)}...</p>
             <div class="card-footer">
-              <p class="read-more-btn">
-                Read More <span>→</span>
-              </p>
+              <p class="read-more-btn">Read More <span>→</span></p>
             </div>
           </div>
         </article>
-      </a>
-    `;
-  });
+      `;
 
-  if (snapshot.empty) {
-    articleGrid.innerHTML = "<p>No articles found.</p>";
+      articleGrid.appendChild(a);
+    });
+
+    if (snapshot.empty) {
+      articleGrid.innerHTML = "<p>No articles found.</p>";
+    }
+
+  } catch (err) {
+    articleGrid.innerHTML = `<p>Error loading articles: ${err.message}</p>`;
   }
 }
 
-loadArticles();
+// Load articles on page load
+window.addEventListener("DOMContentLoaded", loadArticles);
