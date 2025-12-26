@@ -1,46 +1,72 @@
-<script type="module">
-import { collection, getDocs, orderBy, query } 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getFirestore, collection, getDocs, orderBy, query }
 from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-const container = document.getElementById("articles");
+const firebaseConfig = {
+  apiKey: "AIzaSyChrKBpyRSLhkmVMy3c1gdWBp4_grrrphA",
+  authDomain: "boardques.firebaseapp.com",
+  projectId: "boardques",
+  storageBucket: "boardques.firebasestorage.app",
+  messagingSenderId: "496679352856",
+  appId: "1:496679352856:web:1d62a3a23b7fec669ce16d"
+};
 
-const q = query(
-  collection(db, "articles"),
-  orderBy("date", "desc")
-);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-const snap = await getDocs(q);
+const articleGrid = document.getElementById("articleGrid");
 
-snap.forEach(doc => {
-  const d = doc.data();
+function formatDate(timestamp) {
+  const date = timestamp.toDate();
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
 
-  container.innerHTML += `
-    <a href="#">
-      <article class="card">
-        <div class="card-img">
-          <img src="${d.image}" alt="${d.title}">
-          <span class="badge hsc-badge">${d.board || "HSC"}</span>
-        </div>
+async function loadArticles() {
+  const q = query(collection(db, "articles"), orderBy("date", "desc"));
+  const snapshot = await getDocs(q);
 
-        <div class="card-body">
-          <div class="meta-info">
-            <span class="category">${d.category}</span>
-            <span class="date">
-              ${new Date(d.date.seconds * 1000).toDateString()}
+  articleGrid.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+
+    articleGrid.innerHTML += `
+      <a href="#">
+        <article class="card">
+          <div class="card-img">
+            <img src="${data.image}" alt="${data.title}">
+            <span class="badge ${data.board.toLowerCase()}-badge">
+              ${data.board}
             </span>
           </div>
 
-          <h3>${d.title}</h3>
-          <p>${d.summary}</p>
+          <div class="card-body">
+            <div class="meta-info">
+              <span class="category">${data.category}</span>
+              <span class="date">${formatDate(data.date)}</span>
+            </div>
 
-          <div class="card-footer">
-            <p class="read-more-btn">
-              Read More <span>→</span>
-            </p>
+            <h3>${data.title}</h3>
+            <p>${data.summary}</p>
+
+            <div class="card-footer">
+              <p class="read-more-btn">
+                Read More <span>→</span>
+              </p>
+            </div>
           </div>
-        </div>
-      </article>
-    </a>
-  `;
-});
-</script>
+        </article>
+      </a>
+    `;
+  });
+
+  if (snapshot.empty) {
+    articleGrid.innerHTML = "<p>No articles found.</p>";
+  }
+}
+
+loadArticles();
