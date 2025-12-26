@@ -40,7 +40,7 @@ async function loadArticles() {
           <div class="card-img">
             <img src="${data.image}" alt="${data.title}">
             <span class="badge ${data.board.toLowerCase()}-badge">
-              ${data.board}
+              ${data.board.toUpperCase()}
             </span>
           </div>
 
