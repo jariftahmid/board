@@ -1,21 +1,30 @@
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-// articleGrid element
+// DOM
 const articleGrid = document.getElementById("articleGrid");
 
 async function loadArticles() {
   articleGrid.innerHTML = "Loading...";
 
   try {
-    const snapshot = await getDocs(collection(db, "articles"));
+    const snapshot = await getDocs(collection(window.db, "articles"));
     articleGrid.innerHTML = "";
+
+    if (snapshot.empty) {
+      articleGrid.innerHTML = "<p>No articles found.</p>";
+      return;
+    }
 
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
 
-      const a = document.createElement("a");
-      a.href = "#"; // future: article link
+      // Format date like "10 Nov 2025"
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      const formattedDate = data.date ? new Date(data.date.seconds * 1000).toLocaleDateString('en-US', options) : '';
 
+      // Create article element
+      const a = document.createElement("a");
+      a.href = "#"; // future: link to full article
       a.innerHTML = `
         <article class="card">
           <div class="card-img">
@@ -25,7 +34,7 @@ async function loadArticles() {
           <div class="card-body">
             <div class="meta-info">
               <span class="category">${data.category}</span>
-              <span class="date">${new Date(data.date.seconds * 1000).toLocaleDateString()}</span>
+              <span class="date">${formattedDate}</span>
             </div>
             <h3>${data.title}</h3>
             <p>${data.content.substring(0, 120)}...</p>
@@ -35,16 +44,12 @@ async function loadArticles() {
           </div>
         </article>
       `;
-
       articleGrid.appendChild(a);
     });
 
-    if (snapshot.empty) {
-      articleGrid.innerHTML = "<p>No articles found.</p>";
-    }
-
   } catch (err) {
     articleGrid.innerHTML = `<p>Error loading articles: ${err.message}</p>`;
+    console.error(err);
   }
 }
 
