@@ -45,7 +45,7 @@ async function loadArticles() {
 
           <div class="card-body">
             <div class="meta-info">
-              <span class="category">${data.title}</span>
+              <span class="category">${data.subject}</span>
               <span class="date">${formattedDate}</span>
             </div>
 
