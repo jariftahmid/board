@@ -37,5 +37,23 @@ async function loadArticle() {
     articleContent.innerHTML = `<p>Error: ${err.message}</p>`;
   }
 }
+snap.forEach(docSnap => {
+  const data = docSnap.data();
+
+  document.title = data.title + " | Professor Jarif";
+
+  let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+
+  articleContent.innerHTML = `
+    <h1>${data.title}</h1>
+    <p class="meta">
+      <span class="badge ${badgeClass}">${data.category.toUpperCase()}</span>
+      <span class="subject">${data.subject}</span>
+    </p>
+    <img src="${data.image}" alt="${data.title}">
+    <div>${data.content}</div>
+  `;
+});
+
 
 window.addEventListener("DOMContentLoaded", loadArticle);
