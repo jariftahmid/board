@@ -9,17 +9,19 @@
 </head>
 <body>
 
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">Professor Jarif</div>
         <ul class="nav-links">
             <li class="center"><a href="index.html">Home</a></li>
             <li class="center"><a href="question.html" id="ques-nav">Questions</a></li>
-            <li class="center"><a href="../article/article.html">Articles</a></li>
+            <li class="center"><a href="article/article.html">Articles</a></li>
             <li class="center"><a href="#">Teacher's Corner</a></li>
             <li class="center"><a href="#">About Us</a></li>
         </ul>
     </nav>
 
+    <!-- Hero Section -->
     <header class="hero">
         <div class="hero-content">
             <h1>শিক্ষা দেশো, <br><span class="highlight">বিজয়ী বেশে।</span></h1>
@@ -31,25 +33,25 @@
         </div>
     </header>
 
-    <div class="container main-layout">
-        
-        <main class="articles" id="articles-section">
-            <div class="section-header">
-                <h2 class="section-title">Popular Articles</h2>
-                <a href="article.html" class="view-all">View All Articles</a>
-            </div>
+    <!-- Main Articles Section -->
+    <main class="articles" id="articles-section">
+        <div class="section-header">
+            <h2 class="section-title">Popular Articles</h2>
+            <a href="article/article.html" class="view-all">View All Articles</a>
+        </div>
 
-            <div class="article-grid" id="articleGrid"></div>
+        <!-- Article grid populated by JS -->
+        <div class="article-grid" id="articleGrid"></div>
+    </main>
 
+    <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2025 Professor Jarif. All rights reserved.</p>
     </footer>
 
-    <script src="script.js"></script>
-    <script src="article/article.js"></script>
-    <script src="article/firebase.js"></script>
+    <!-- Firebase + Article JS (type=module) -->
+    <script type="module" src="article/firebase.js"></script>
+    <script type="module" src="article/article.js"></script>
+
 </body>
-
 </html>
-
-
