@@ -18,32 +18,47 @@ async function loadArticles() {
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
 
-      // Format date like "10 Nov 2025"
+      // Date format → 10 Nov 2025
       const options = { day: '2-digit', month: 'short', year: 'numeric' };
-      const formattedDate = data.date ? new Date(data.date.seconds * 1000).toLocaleDateString('en-US', options) : '';
+      const formattedDate = data.date
+        ? new Date(data.date.seconds * 1000).toLocaleDateString('en-US', options)
+        : '';
 
-      // Create article element
+      // Badge class logic
+      let badgeClass = "";
+      if (data.category?.toLowerCase() === "ssc") {
+        badgeClass = "ssc-badge";
+      } else if (data.category?.toLowerCase() === "hsc") {
+        badgeClass = "hsc-badge";
+      }
+
       const a = document.createElement("a");
-      a.href = "#"; // future: link to full article
+      a.href = "#";
       a.innerHTML = `
         <article class="card">
           <div class="card-img">
             <img src="${data.image}" alt="${data.title}">
-            <span class=`"${data.category.toLowerCase()}"`>${data.category.toUpperCase()}</span>
+            <span class="badge ${badgeClass}">
+              ${data.category.toUpperCase()}
+            </span>
           </div>
+
           <div class="card-body">
             <div class="meta-info">
               <span class="category">${data.category}</span>
               <span class="date">${formattedDate}</span>
             </div>
+
             <h3>${data.title}</h3>
             <p>${data.content.substring(0, 120)}...</p>
+
             <div class="card-footer">
               <p class="read-more-btn">Read More <span>→</span></p>
             </div>
           </div>
         </article>
       `;
+
       articleGrid.appendChild(a);
     });
 
@@ -53,5 +68,4 @@ async function loadArticles() {
   }
 }
 
-// Load articles on page load
 window.addEventListener("DOMContentLoaded", loadArticles);
