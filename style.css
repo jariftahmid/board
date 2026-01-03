@@ -11,7 +11,8 @@ body {
     color: #333;
     line-height: 1.6;
 }
-
+* a{ text-decoration:none;
+   }
 .container {
     max-width: 1250px;
     margin: 0 auto;
@@ -238,3 +239,4 @@ select:focus { border-color: #34efdf; transform: scale(1.02); }
     color: #2980b9 !important;
     font-weight: 700;
 }
+
