@@ -21,6 +21,10 @@ async function loadArticle() {
 
     snap.forEach(docSnap => {
       const data = docSnap.data();
+
+      // Set page title dynamically
+      document.title = data.title + " | Professor Jarif";
+
       articleContent.innerHTML = `
         <h1>${data.title}</h1>
         <p><strong>${data.subject} | ${data.category}</strong></p>
