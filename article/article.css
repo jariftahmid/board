@@ -5,5 +5,8 @@
 }
 a {
     text-decoration: none;
-
+}
+#article-nav{
+    color:#2980b9 !important;
+    font-weight: 700;
 }
