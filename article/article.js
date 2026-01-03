@@ -3,6 +3,14 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/f
 // DOM
 const articleGrid = document.getElementById("articleGrid");
 
+// Format date like "10 Nov 2025"
+const formatDate = (timestamp) => {
+  if (!timestamp) return "";
+  const date = new Date(timestamp.seconds * 1000);
+  const options = { day: "2-digit", month: "short", year: "numeric" };
+  return date.toLocaleDateString("en-US", options);
+};
+
 async function loadArticles() {
   articleGrid.innerHTML = "Loading...";
 
@@ -18,47 +26,30 @@ async function loadArticles() {
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
 
-      // Date format → 10 Nov 2025
-      const options = { day: '2-digit', month: 'short', year: 'numeric' };
-      const formattedDate = data.date
-        ? new Date(data.date.seconds * 1000).toLocaleDateString('en-US', options)
-        : '';
-
-      // Badge class logic
-      let badgeClass = "";
-      if (data.category?.toLowerCase() === "ssc") {
-        badgeClass = "ssc-badge";
-      } else if (data.category?.toLowerCase() === "hsc") {
-        badgeClass = "hsc-badge";
-      }
+      // Badge class based on category
+      let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
 
       const a = document.createElement("a");
-      a.href = "#";
+      a.href = "#"; // future: link to full article
       a.innerHTML = `
         <article class="card">
           <div class="card-img">
             <img src="${data.image}" alt="${data.title}">
-            <span class="badge ${badgeClass}">
-              ${data.category.toUpperCase()}
-            </span>
+            <span class="badge ${badgeClass}">${data.category.toUpperCase()}</span>
           </div>
-
           <div class="card-body">
             <div class="meta-info">
               <span class="category">${data.subject}</span>
-              <span class="date">${formattedDate}</span>
+              <span class="date">${formatDate(data.createdAt)}</span>
             </div>
-
             <h3>${data.title}</h3>
-            <p>${data.content.substring(0, 120)}...</p>
-
+            <p>${data.content.replace(/<[^>]+>/g, '').substring(0, 120)}...</p>
             <div class="card-footer">
               <p class="read-more-btn">Read More <span>→</span></p>
             </div>
           </div>
         </article>
       `;
-
       articleGrid.appendChild(a);
     });
 
@@ -68,4 +59,5 @@ async function loadArticles() {
   }
 }
 
+// Load on DOM ready
 window.addEventListener("DOMContentLoaded", loadArticles);
