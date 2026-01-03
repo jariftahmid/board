@@ -1,8 +1,18 @@
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { collection, getDocs, query, where } 
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const articleContent = document.getElementById("articleContent");
+
+// Get slug from URL query
 const params = new URLSearchParams(window.location.search);
 const slug = params.get("slug");
+
+// Format date like "10 Nov 2025"
+const formatDate = (timestamp) => {
+  if (!timestamp) return "";
+  const date = new Date(timestamp.seconds * 1000);
+  return date.toLocaleDateString("en-US", { day:'2-digit', month:'short', year:'numeric' });
+};
 
 async function loadArticle() {
   if (!slug) {
@@ -11,7 +21,7 @@ async function loadArticle() {
   }
 
   try {
-    const q = query(collection(window.db, "articles"), where("slug","==",slug));
+    const q = query(collection(window.db, "articles"), where("slug", "==", slug));
     const snap = await getDocs(q);
 
     if (snap.empty) {
@@ -22,38 +32,28 @@ async function loadArticle() {
     snap.forEach(docSnap => {
       const data = docSnap.data();
 
-      // Set page title dynamically
+      // Set dynamic page title
       document.title = data.title + " | Professor Jarif";
+
+      // Badge color
+      let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
 
       articleContent.innerHTML = `
         <h1>${data.title}</h1>
-        <p><strong>${data.subject} | ${data.category}</strong></p>
-        <img src="${data.image}" alt="${data.title}" style="max-width:100%; margin:10px 0;">
+        <p class="meta">
+          <span class="badge ${badgeClass}">${data.category.toUpperCase()}</span>
+          <span class="subject">${data.subject}</span>
+          <span class="date">${formatDate(data.createdAt)}</span>
+        </p>
+        <img src="${data.image}" alt="${data.title}">
         <div>${data.content}</div>
       `;
     });
 
-  } catch(err) {
-    articleContent.innerHTML = `<p>Error: ${err.message}</p>`;
+  } catch (err) {
+    articleContent.innerHTML = `<p>Error loading article: ${err.message}</p>`;
+    console.error(err);
   }
 }
-snap.forEach(docSnap => {
-  const data = docSnap.data();
-
-  document.title = data.title + " | Professor Jarif";
-
-  let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
-
-  articleContent.innerHTML = `
-    <h1>${data.title}</h1>
-    <p class="meta">
-      <span class="badge ${badgeClass}">${data.category.toUpperCase()}</span>
-      <span class="subject">${data.subject}</span>
-    </p>
-    <img src="${data.image}" alt="${data.title}">
-    <div>${data.content}</div>
-  `;
-});
-
 
 window.addEventListener("DOMContentLoaded", loadArticle);
