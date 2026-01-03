@@ -29,7 +29,7 @@ async function loadArticles() {
         <article class="card">
           <div class="card-img">
             <img src="${data.image}" alt="${data.title}">
-            <span class="badge">${data.category}</span>
+            <span class=`"${data.category.toLowerCase()}"`>${data.category.toUpperCase()}</span>
           </div>
           <div class="card-body">
             <div class="meta-info">
