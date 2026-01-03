@@ -240,4 +240,7 @@ select:focus { border-color: #34efdf; transform: scale(1.02); }
     font-weight: 700;
 }
 
+#article-grid{
+    padding:5px;
+}
 
