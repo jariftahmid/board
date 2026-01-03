@@ -236,4 +236,8 @@ select:focus { border-color: #34efdf; transform: scale(1.02); }
     .navbar { padding: 15px 20px; }
     .hero { flex-direction: column; text-align: center; padding: 40px 20px; }
     .main-layout { grid-template-columns: 1fr; }
+
+}
+a {
+    text-decoration: none;
 }
