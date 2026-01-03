@@ -1,4 +1,4 @@
-/* Basic reset */
+/* Reset & Base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -33,13 +33,25 @@ body {
   color: #fff;
   text-decoration: none;
   margin-left: 15px;
+  position: relative;
 }
 
-.navbar a:hover {
-  text-decoration: underline;
+.navbar a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background: #fff;
+  transition: 0.3s;
 }
 
-/* Article content */
+.navbar a:hover::after {
+  width: 100%;
+}
+
+/* Article container */
 #articleContent {
   max-width: 900px;
   margin: 30px auto;
@@ -49,24 +61,64 @@ body {
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
+/* Article Title */
 #articleContent h1 {
   font-size: 2rem;
   margin-bottom: 15px;
   color: #222;
 }
 
+/* Meta info: badge, subject, date */
 #articleContent p.meta {
   font-size: 0.9rem;
   color: #777;
   margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  position: relative;
 }
 
+/* Badge */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* Badge colors */
+.ssc-badge { background-color: #1abc9c; }   /* Green */
+.hsc-badge { background-color: #e67e22; }   /* Orange */
+
+/* Subject */
+.subject {
+  font-weight: 600;
+  color: #3498db;
+}
+
+/* Date */
+.date {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+/* Article Image */
 #articleContent img {
   max-width: 100%;
   border-radius: 5px;
   margin: 20px 0;
+  display: block;
+  position: relative;
 }
 
+/* Article main content */
 #articleContent div {
   font-size: 1rem;
   color: #444;
@@ -74,15 +126,20 @@ body {
   margin-bottom: 20px;
 }
 
+/* Footer (optional) */
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
 /* Responsive */
 @media screen and (max-width: 600px) {
   #articleContent {
     padding: 15px;
   }
-  a {
-    text-decoration: none;
-
-}
 
   #articleContent h1 {
     font-size: 1.5rem;
