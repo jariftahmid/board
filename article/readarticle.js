@@ -1,29 +1,37 @@
-import { collection, query, where, getDocs }
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-const params = new URLSearchParams(location.search);
+const articleContent = document.getElementById("articleContent");
+const params = new URLSearchParams(window.location.search);
 const slug = params.get("slug");
 
 async function loadArticle() {
-  const q = query(
-    collection(window.db, "articles"),
-    where("slug", "==", slug),
-    where("published", "==", true)
-  );
+  if (!slug) {
+    articleContent.innerHTML = "<p>No article specified</p>";
+    return;
+  }
 
-  const snap = await getDocs(q);
-  if (snap.empty) return;
+  try {
+    const q = query(collection(window.db, "articles"), where("slug","==",slug));
+    const snap = await getDocs(q);
 
-  const data = snap.docs[0].data();
+    if (snap.empty) {
+      articleContent.innerHTML = "<p>Article not found</p>";
+      return;
+    }
 
-  document.title = data.title;
-  document.getElementById("seo-title").innerText = data.title;
-  document.getElementById("seo-desc").content =
-    data.content.replace(/<[^>]+>/g, '').substring(0, 150);
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      articleContent.innerHTML = `
+        <h1>${data.title}</h1>
+        <p><strong>${data.subject} | ${data.category}</strong></p>
+        <img src="${data.image}" alt="${data.title}" style="max-width:100%; margin:10px 0;">
+        <div>${data.content}</div>
+      `;
+    });
 
-  document.getElementById("articleTitle").innerText = data.title;
-  document.getElementById("articleImage").src = data.image;
-  document.getElementById("articleContent").innerHTML = data.content;
+  } catch(err) {
+    articleContent.innerHTML = `<p>Error: ${err.message}</p>`;
+  }
 }
 
-loadArticle();
+window.addEventListener("DOMContentLoaded", loadArticle);
