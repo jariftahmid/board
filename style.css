@@ -26,7 +26,10 @@ body {
     line-height: 1.7;
     overflow-x: hidden;
 }
-
+#home-nav{
+    color:#2980b9 !important;
+    font-weight: 700;
+}
 /* আপনার অনুরোধ অনুযায়ী সব লিংকের ডিফল্ট কালার এবং আন্ডারলাইন রিমুভ */
 a, a:link, a:visited, a:active {
     text-decoration: none !important; /* No underline */
@@ -305,5 +308,6 @@ a, a:link, a:visited, a:active {
     .nav-links { display: none; } /* Mobile menu needed */
     .hero-content h1 { font-size: 38px; }
 }
+
 
 
