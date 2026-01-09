@@ -33,26 +33,96 @@
         </div>
     </header>
 
-    <!-- Main Articles Section -->
+    <!-- Popular Articles -->
     <main class="articles" id="articles-section">
         <div class="section-header">
             <h2 class="section-title">Popular Articles</h2>
             <a href="article/article.html" class="view-all">View All Articles</a>
         </div>
 
-        <!-- Article grid populated by JS -->
         <div class="article-grid" id="articleGrid"></div>
     </main>
+
+    <!-- 4️⃣ Why Choose Us -->
+    <section class="why-us">
+        <h2 class="section-title">Why Choose Us?</h2>
+        <div class="why-grid">
+            <div class="why-card">
+                <h3>📘 Board Focused</h3>
+                <p>SSC ও HSC বোর্ড পরীক্ষার জন্য আলাদা করে প্রস্তুত কনটেন্ট।</p>
+            </div>
+            <div class="why-card">
+                <h3>🎯 Exam Oriented</h3>
+                <p>পরীক্ষায় সরাসরি কাজে লাগবে এমন প্রশ্ন ও নোট।</p>
+            </div>
+            <div class="why-card">
+                <h3>👨‍🎓 Student Friendly</h3>
+                <p>সহজ ভাষায় ব্যাখ্যা, যেন সবাই বুঝতে পারে।</p>
+            </div>
+            <div class="why-card">
+                <h3>🆓 100% Free</h3>
+                <p>কোনো সাবস্ক্রিপশন ছাড়াই সম্পূর্ণ ফ্রি।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7️⃣ Search Section -->
+    <section class="search-section">
+        <h2 class="section-title">Search Questions & Articles</h2>
+        <input 
+            type="text" 
+            id="searchInput" 
+            class="search-box"
+            placeholder="Search by subject, chapter or topic..."
+        >
+    </section>
+
+    <!-- 5️⃣ Latest Updates -->
+    <section class="updates">
+        <h2 class="section-title">Latest Updates</h2>
+        <ul class="update-list">
+            <li>🔔 HSC Physics Chapter 3 Suggestion Added</li>
+            <li>🔔 SSC Math Short Notes Uploaded</li>
+            <li>🔔 New English Grammar Article Published</li>
+        </ul>
+    </section>
+
+    <!-- 6️⃣ Teacher’s Corner -->
+    <section class="teachers-corner">
+        <h2 class="section-title">Teacher's Corner</h2>
+        <p class="coming-soon">
+            অভিজ্ঞ শিক্ষকদের নোট, ট্রিকস ও সাজেশন খুব শীঘ্রই আসছে...
+        </p>
+    </section>
+
+    <!-- 8️⃣ Statistics -->
+    <section class="stats">
+        <div class="stat-card">
+            <h3>📄 500+</h3>
+            <p>Board Questions</p>
+        </div>
+        <div class="stat-card">
+            <h3>🧠 100+</h3>
+            <p>Articles</p>
+        </div>
+        <div class="stat-card">
+            <h3>🎓 10,000+</h3>
+            <p>Students Helped</p>
+        </div>
+        <div class="stat-card">
+            <h3>⏱ Weekly</h3>
+            <p>Updated</p>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2025 Professor Jarif. All rights reserved.</p>
     </footer>
 
-    <!-- Firebase + Article JS (type=module) -->
+    <!-- Firebase + Article JS -->
     <script type="module" src="article/firebase.js"></script>
     <script type="module" src="article/article.js"></script>
 
 </body>
 </html>
-
