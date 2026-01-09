@@ -255,7 +255,7 @@ a, a:link, a:visited, a:active {
 /* --- STATS SECTION (DARK MOD) --- */
 .stats {
     background: var(--dark);
-    padding: 80px 10%;
+    padding: 80px 4%;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
@@ -301,3 +301,4 @@ a, a:link, a:visited, a:active {
     .nav-links { display: none; } /* Mobile menu needed */
     .hero-content h1 { font-size: 38px; }
 }
+
