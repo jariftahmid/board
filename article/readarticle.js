@@ -1,7 +1,6 @@
 import { collection, getDocs, query, where } 
 from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-// DOM
 const articleContent = document.getElementById("articleContent");
 
 // Get slug from URL query
@@ -33,13 +32,13 @@ async function loadArticle() {
     snap.forEach(docSnap => {
       const data = docSnap.data();
 
-      // Set dynamic page title
+      // Dynamic page title
       document.title = data.title + " | Professor Jarif";
 
       // Badge color
       let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
 
-      // Inject Quill content
+      // Inject content
       articleContent.innerHTML = `
         <h1>${data.title}</h1>
         <p class="meta">
@@ -51,7 +50,7 @@ async function loadArticle() {
         <div id="article-body">${data.content}</div>
       `;
 
-      // Render LaTeX inside Quill content
+      // Render LaTeX / Math formulas
       if (window.MathJax) {
         MathJax.typesetPromise([document.getElementById("article-body")]);
       }
@@ -63,5 +62,5 @@ async function loadArticle() {
   }
 }
 
-// Load article when DOM is ready
+// DOM ready
 window.addEventListener("DOMContentLoaded", loadArticle);
