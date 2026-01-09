@@ -1,246 +1,178 @@
-/* --- ROOT & THEME VARIABLES --- */
+/* --- ROOT & RESET --- */
 :root {
-    --sidebar-bg: #0f172a; /* Deep Slate */
-    --primary: #007aff;    /* Apple Blue */
-    --primary-light: rgba(0, 122, 255, 0.1);
-    --bg-main: #f8fafc;
-    --text-dark: #1e293b;
-    --text-soft: #64748b;
+    --primary: #007aff;
+    --dark: #0f172a;
     --white: #ffffff;
-    --border: #e2e8f0;
-    --radius: 14px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* --- GLOBAL RESET --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Outfit', 'Poppins', sans-serif;
+    --bg: #f8fbff;
+    --text-soft: #64748b;
+    --transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 body {
-    background-color: var(--bg-main);
-    color: var(--text-dark);
-    overflow-x: hidden;
-}
-
-/* --- DASHBOARD LAYOUT --- */
-.dashboard-container {
+    background-color: var(--bg);
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
 
-/* --- SIDEBAR DESIGN --- */
-.sidebar {
-    width: 280px;
-    background: var(--sidebar-bg);
-    color: var(--white);
-    padding: 30px 20px;
-    position: fixed;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
+/* Link visited behavior fix */
+a, a:visited {
+    text-decoration: none !important;
+    color: inherit !important;
 }
 
-.sidebar h2 {
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 40px;
-    padding-left: 10px;
-    letter-spacing: 1px;
-    color: var(--primary);
-    text-transform: uppercase;
-}
-
-.sidebar ul {
-    list-style: none;
-    flex-grow: 1;
-}
-
-.sidebar li {
-    margin-bottom: 10px;
-}
-
-.sidebar span {
-    display: block;
-    padding: 12px 15px;
-    font-weight: 600;
-    font-size: 15px;
-    color: #94a3b8;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: var(--transition);
-}
-
-.sidebar span:hover {
-    color: var(--white);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* Submenu Styling */
-.submenu {
-    margin-top: 5px;
-    padding-left: 20px;
-}
-
-.submenu li {
-    padding: 10px 15px;
-    font-size: 14px;
-    color: #cbd5e1;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: var(--transition);
-    position: relative;
-}
-
-.submenu li::before {
-    content: '•';
-    margin-right: 10px;
-    color: var(--primary);
-}
-
-.submenu li:hover {
-    background: var(--primary);
-    color: var(--white);
-    transform: translateX(5px);
-}
-
-#logoutBtn {
-    background: rgba(244, 63, 94, 0.1);
-    color: #fb7185;
-    border: 1px solid rgba(244, 63, 94, 0.2);
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: var(--transition);
-}
-
-#logoutBtn:hover {
-    background: #f43f5e;
-    color: white;
-}
-
-/* --- MAIN CONTENT AREA --- */
-.main-content {
-    margin-left: 280px;
-    flex: 1;
-    padding: 50px;
-}
-
-.cms-section {
-    display: none; /* JavaScript handle করবে */
+/* --- SEARCH CARD --- */
+.search-sidebar {
+    max-width: 500px;
+    margin: 60px auto;
     background: var(--white);
     padding: 40px;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-    border: 1px solid var(--border);
-    animation: fadeIn 0.5s ease-out;
+    border-radius: 35px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.02);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.cms-section h2 {
-    font-size: 26px;
-    margin-bottom: 30px;
+.section-title {
+    font-size: 28px;
     font-weight: 800;
-    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 35px;
+    color: var(--dark);
+    letter-spacing: -0.5px;
 }
 
-/* --- FORM ELEMENTS --- */
-input, select {
-    width: 100%;
-    padding: 14px 18px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    border: 2px solid #f1f5f9;
-    background: #f8fafc;
-    font-size: 15px;
-    outline: none;
-    transition: var(--transition);
+/* --- CUSTOM SELECT DESIGN --- */
+.form-group {
+    margin-bottom: 22px;
 }
 
-input:focus, select:focus {
-    border-color: var(--primary);
-    background: var(--white);
-    box-shadow: 0 0 0 4px var(--primary-light);
-}
-
-h4 {
-    margin-bottom: 10px;
-    font-size: 14px;
-    text-transform: uppercase;
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
     color: var(--text-soft);
+    margin-bottom: 8px;
+    margin-left: 5px;
+    text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-/* --- QUILL EDITOR CUSTOMIZATION --- */
-.ql-toolbar.ql-snow {
-    border-radius: 12px 12px 0 0;
-    border: 2px solid #f1f5f9;
-    background: #f8fafc;
-}
-
-.ql-container.ql-snow {
-    border-radius: 0 0 12px 12px;
-    border: 2px solid #f1f5f9;
-    margin-bottom: 30px;
-    font-size: 16px;
-}
-
-/* --- BUTTONS --- */
-button[id*="publish"] {
-    background: var(--primary);
-    color: white;
-    padding: 16px 30px;
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0, 122, 255, 0.2);
-    transition: var(--transition);
+.custom-select {
+    position: relative;
     width: 100%;
-    margin-top: 10px;
 }
 
-button[id*="publish"]:hover {
-    background: #006ae6;
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(0, 122, 255, 0.3);
-}
-
-/* --- LIST VIEW (For Editing) --- */
-#articleList, #questionList {
-    display: grid;
-    gap: 15px;
-}
-
-.list-item {
-    background: #f8fafc;
-    padding: 15px 25px;
-    border-radius: 15px;
+.select-trigger {
+    background: #f1f5f9;
+    padding: 16px 20px;
+    border-radius: 16px;
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid var(--border);
+    font-weight: 500;
+    color: var(--dark);
+    border: 2px solid transparent;
+    transition: var(--transition);
 }
 
-.list-item h3 { font-size: 16px; font-weight: 600; }
+.select-trigger:hover {
+    background: #e2e8f0;
+}
 
-.btn-edit { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
-.btn-delete { background: #f43f5e; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; margin-left: 10px; }
+.custom-select.open .select-trigger {
+    background: var(--white);
+    border-color: var(--primary);
+    box-shadow: 0 10px 20px rgba(0, 122, 255, 0.05);
+}
 
-/* --- RESPONSIVE --- */
-@media (max-width: 992px) {
-    .sidebar { width: 80px; padding: 20px 10px; }
-    .sidebar h2, .sidebar span, .submenu { display: none; }
-    .main-content { margin-left: 80px; padding: 20px; }
+.select-trigger::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+    transform: rotate(45deg);
+    transition: var(--transition);
+    margin-top: -4px;
+}
+
+.custom-select.open .select-trigger::after {
+    transform: rotate(-135deg);
+    margin-top: 4px;
+}
+
+/* OPTIONS CONTAINER (The part you wanted to style) */
+.options-container {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+    display: none;
+    z-index: 100;
+    padding: 10px;
+    border: 1px solid rgba(0,0,0,0.05);
+    transform: translateY(10px);
+    opacity: 0;
+}
+
+.custom-select.open .options-container {
+    display: block;
+    animation: dropIn 0.3s forwards ease;
+}
+
+@keyframes dropIn {
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.option {
+    padding: 14px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--dark);
+    transition: 0.2s;
+}
+
+.option:hover {
+    background: #f0f7ff;
+    color: var(--primary);
+}
+
+.option.selected {
+    background: var(--primary);
+    color: var(--white);
+}
+
+/* --- BUTTON --- */
+.btn-search {
+    width: 100%;
+    padding: 18px;
+    margin-top: 15px;
+    background: var(--dark);
+    color: var(--white);
+    border: none;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-search:hover {
+    background: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0, 122, 255, 0.2);
+}
+
+/* --- FOOTER --- */
+.footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-soft);
+    font-size: 14px;
+    margin-top: auto;
 }
