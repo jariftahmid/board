@@ -248,6 +248,10 @@ a, a:link, a:visited, a:active {
     text-align: center;
     transition: var(--transition-smooth);
 }
+.update-list{
+    list-style: none;
+    padding: 0 35%;
+}
 
 .why-card:hover { background: var(--dark); color: white; }
 .why-card h3 { font-size: 24px; margin-bottom: 15px; }
@@ -301,4 +305,5 @@ a, a:link, a:visited, a:active {
     .nav-links { display: none; } /* Mobile menu needed */
     .hero-content h1 { font-size: 38px; }
 }
+
 
