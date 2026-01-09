@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professor Jarif | Board Question Bank</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="question.css">
 </head>
 <body>
+
     <nav class="navbar">
         <div class="logo">Professor Jarif</div>
         <ul class="nav-links">
@@ -19,51 +20,104 @@
             <li class="center"><a href="#">About Us</a></li>
         </ul>
     </nav>
-    <aside class="search-sidebar" id="search-section">
+
+    <main class="main-content">
+        <aside class="search-sidebar" id="search-section">
             <h2 class="section-title">Question Search</h2>
             <form id="redirectForm">
+                
                 <div class="form-group">
                     <label>Exam Type</label>
-                    <select id="exam">
-                        <option value="">Select Exam</option>
-                        <option value="ssc">SSC</option>
-                        <option value="hsc">HSC</option>
-                    </select>
+                    <div class="custom-select" data-id="exam">
+                        <div class="select-trigger"><span>Select Exam</span></div>
+                        <div class="options-container">
+                            <div class="option" data-value="ssc">SSC</div>
+                            <div class="option" data-value="hsc">HSC</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="exam" name="exam">
                 </div>
+
                 <div class="form-group">
                     <label>Subject</label>
-                    <select id="subject">
-                        <option value="">Select Subject</option>
-                        <option value="math">Math</option>
-                        <option value="physics">Physics</option>
-                        <option value="english">English</option>
-                        <option value="chemistry">Chemistry</option>
-                    </select>
+                    <div class="custom-select" data-id="subject">
+                        <div class="select-trigger"><span>Select Subject</span></div>
+                        <div class="options-container">
+                            <div class="option" data-value="math">Math</div>
+                            <div class="option" data-value="physics">Physics</div>
+                            <div class="option" data-value="english">English</div>
+                            <div class="option" data-value="chemistry">Chemistry</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="subject" name="subject">
                 </div>
+
                 <div class="form-group">
                     <label>Board</label>
-                    <select id="board">
-                        <option value="">Select Board</option>
-                        <option value="dhaka">Dhaka</option>
-                        <option value="rajshahi">Rajshahi</option>
-                    </select>
+                    <div class="custom-select" data-id="board">
+                        <div class="select-trigger"><span>Select Board</span></div>
+                        <div class="options-container">
+                            <div class="option" data-value="dhaka">Dhaka</div>
+                            <div class="option" data-value="rajshahi">Rajshahi</div>
+                            <div class="option" data-value="chittagong">Chittagong</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="board" name="board">
                 </div>
+
                 <div class="form-group">
                     <label>Year</label>
-                    <select id="year">
-                        <option value="">Select Year</option>
-                        <option value="2025">2025</option>
-                        <option value="2024">2024</option>
-                    </select>
+                    <div class="custom-select" data-id="year">
+                        <div class="select-trigger"><span>Select Year</span></div>
+                        <div class="options-container">
+                            <div class="option" data-value="2025">2025</div>
+                            <div class="option" data-value="2024">2024</div>
+                            <div class="option" data-value="2023">2023</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="year" name="year">
                 </div>
+
                 <button type="submit" class="btn-search">Search Now</button>
             </form>
         </aside>
+    </main>
+
     <footer class="footer">
         <p>&copy; 2025 Professor Jarif. All rights reserved.</p>
     </footer>
-    </body>
 
+    <script>
+        document.querySelectorAll('.custom-select').forEach(select => {
+            const trigger = select.querySelector('.select-trigger');
+            const options = select.querySelectorAll('.option');
+            const hiddenInput = select.parentElement.querySelector('input[type="hidden"]');
+
+            trigger.addEventListener('click', () => {
+                // ক্লোজ অন্য সব ড্রপডাউন
+                document.querySelectorAll('.custom-select').forEach(other => {
+                    if (other !== select) other.classList.remove('open');
+                });
+                select.classList.toggle('open');
+            });
+
+            options.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    trigger.querySelector('span').innerText = opt.innerText;
+                    hiddenInput.value = opt.dataset.value;
+                    select.classList.remove('open');
+                    
+                    options.forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                });
+            });
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-select')) {
+                document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+            }
+        });
+    </script>
+</body>
 </html>
-
-
