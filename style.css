@@ -103,7 +103,7 @@ a, a:link, a:visited, a:active {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 500px 0%;
+    padding: 50px 0%;
     gap: 10px;
     background: radial-gradient(circle at top right, #e0f2fe, transparent 40%);
 }
@@ -308,6 +308,7 @@ a, a:link, a:visited, a:active {
     .nav-links { display: none; } /* Mobile menu needed */
     .hero-content h1 { font-size: 38px; }
 }
+
 
 
 
