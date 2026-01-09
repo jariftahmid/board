@@ -55,5 +55,10 @@ async function loadArticle() {
     console.error(err);
   }
 }
+const articleContentDiv = document.getElementById("articleContent");
+articleContentDiv.innerHTML = articleData.content; // Quill HTML
+
+// Render LaTeX
+MathJax.typesetPromise();
 
 window.addEventListener("DOMContentLoaded", loadArticle);
