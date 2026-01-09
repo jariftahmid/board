@@ -1,6 +1,7 @@
 import { collection, getDocs, query, where } 
 from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
+// DOM
 const articleContent = document.getElementById("articleContent");
 
 // Get slug from URL query
@@ -38,6 +39,7 @@ async function loadArticle() {
       // Badge color
       let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
 
+      // Inject Quill content
       articleContent.innerHTML = `
         <h1>${data.title}</h1>
         <p class="meta">
@@ -46,8 +48,13 @@ async function loadArticle() {
           <span class="date">${formatDate(data.createdAt)}</span>
         </p>
         <img src="${data.image}" alt="${data.title}">
-        <div>${data.content}</div>
+        <div id="article-body">${data.content}</div>
       `;
+
+      // Render LaTeX inside Quill content
+      if (window.MathJax) {
+        MathJax.typesetPromise([document.getElementById("article-body")]);
+      }
     });
 
   } catch (err) {
@@ -55,10 +62,6 @@ async function loadArticle() {
     console.error(err);
   }
 }
-const articleContentDiv = document.getElementById("articleContent");
-articleContentDiv.innerHTML = articleData.content; // Quill HTML
 
-// Render LaTeX
-MathJax.typesetPromise();
-
+// Load article when DOM is ready
 window.addEventListener("DOMContentLoaded", loadArticle);
