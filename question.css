@@ -1,136 +1,150 @@
-/* --- GOOGLE FONTS & RESET --- */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Outfit', sans-serif;
-}
-
+/* --- ROOT & RESET --- */
 :root {
     --primary: #007aff;
     --dark: #0f172a;
-    --bg-gradient: linear-gradient(135deg, #f8faff 0%, #e2e8f0 100%);
     --white: #ffffff;
+    --bg: #f8fbff;
+    --text-soft: #64748b;
     --transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 body {
-    background: var(--bg-gradient);
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
-    color: var(--dark);
 }
 
-/* --- LINK FIXES --- */
+/* Link visited behavior fix */
 a, a:visited {
     text-decoration: none !important;
     color: inherit !important;
 }
 
-/* --- NAVBAR --- */
-.navbar {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(20px);
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10%;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--dark);
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 30px;
-}
-
 /* --- SEARCH CARD --- */
 .search-sidebar {
-    max-width: 550px;
+    max-width: 500px;
     margin: 60px auto;
     background: var(--white);
-    padding: 50px;
+    padding: 40px;
     border-radius: 35px;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.08);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.02);
 }
 
 .section-title {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 35px;
     color: var(--dark);
     letter-spacing: -0.5px;
 }
 
-/* --- SELECT STYLING (The Pro Way) --- */
+/* --- CUSTOM SELECT DESIGN --- */
 .form-group {
-    margin-bottom: 25px;
-    position: relative;
+    margin-bottom: 22px;
 }
 
 .form-group label {
     display: block;
     font-size: 13px;
     font-weight: 700;
-    color: #94a3b8;
-    margin-bottom: 10px;
+    color: var(--text-soft);
+    margin-bottom: 8px;
+    margin-left: 5px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
-/* Select Box-কে অনেক সুন্দর করার জন্য */
-select {
+.custom-select {
+    position: relative;
     width: 100%;
+}
+
+.select-trigger {
+    background: #f1f5f9;
     padding: 16px 20px;
-    font-size: 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-weight: 500;
     color: var(--dark);
-    background-color: #f8fafc;
-    border: 2px solid #e2e8f0;
-    border-radius: 16px;
-    outline: none;
-    cursor: pointer;
-    appearance: none; /* Default Arrow Hide */
-    
-    /* Custom Arrow */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23007aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 20px center;
-    background-size: 18px;
+    border: 2px solid transparent;
     transition: var(--transition);
 }
 
-/* হোভার করলে ড্রপডাউন বক্সটি সুন্দর হবে */
-select:hover {
-    border-color: var(--primary);
-    background-color: #ffffff;
+.select-trigger:hover {
+    background: #e2e8f0;
 }
 
-select:focus {
+.custom-select.open .select-trigger {
+    background: var(--white);
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
-    background-color: #ffffff;
+    box-shadow: 0 10px 20px rgba(0, 122, 255, 0.05);
 }
 
-/* --- OPTIONS STYLING --- */
-/* নোট: ব্রাউজার ভেদে অপশনের কালার এবং ফন্ট ঠিক রাখার জন্য */
-select option {
-    font-size: 16px;
-    padding: 20px; /* কিছু ব্রাউজারে কাজ করে */
-    background-color: #ffffff;
+.select-trigger::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+    transform: rotate(45deg);
+    transition: var(--transition);
+    margin-top: -4px;
+}
+
+.custom-select.open .select-trigger::after {
+    transform: rotate(-135deg);
+    margin-top: 4px;
+}
+
+/* OPTIONS CONTAINER (The part you wanted to style) */
+.options-container {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+    display: none;
+    z-index: 100;
+    padding: 10px;
+    border: 1px solid rgba(0,0,0,0.05);
+    transform: translateY(10px);
+    opacity: 0;
+}
+
+.custom-select.open .options-container {
+    display: block;
+    animation: dropIn 0.3s forwards ease;
+}
+
+@keyframes dropIn {
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.option {
+    padding: 14px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
     color: var(--dark);
+    transition: 0.2s;
+}
+
+.option:hover {
+    background: #f0f7ff;
+    color: var(--primary);
+}
+
+.option.selected {
+    background: var(--primary);
+    color: var(--white);
 }
 
 /* --- BUTTON --- */
@@ -142,7 +156,7 @@ select option {
     color: var(--white);
     border: none;
     border-radius: 18px;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
     cursor: pointer;
     transition: var(--transition);
@@ -150,19 +164,15 @@ select option {
 
 .btn-search:hover {
     background: var(--primary);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(0, 122, 255, 0.25);
-}
-
-.btn-search:active {
-    transform: scale(0.97);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0, 122, 255, 0.2);
 }
 
 /* --- FOOTER --- */
 .footer {
     text-align: center;
     padding: 40px;
-    color: #94a3b8;
+    color: var(--text-soft);
     font-size: 14px;
     margin-top: auto;
 }
