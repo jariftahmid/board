@@ -176,3 +176,8 @@ a, a:visited {
     font-size: 14px;
     margin-top: auto;
 }
+
+#ques-nav{
+    color:#2980b9 !important;
+    font-weight: 700;
+}
