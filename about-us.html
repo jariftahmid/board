@@ -130,5 +130,27 @@
  <footer class="footer">
         <p>&copy; 2025 Professor Jarif. All rights reserved.</p>
  </footer>
+    <scrtipt>
+        document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll('.mv-card');
+
+    cards.forEach(card => {
+        // 1. Mouse Hover korle active class change hobe
+        card.addEventListener('mouseenter', function() {
+            // baki shob card theke active-card class remove kora
+            cards.forEach(c => c.classList.remove('active-card'));
+            
+            // current card e active-card class add kora
+            this.classList.add('active-card');
+        });
+
+        // 2. Click korle permanent active hobe (Mobile Friendly)
+        card.addEventListener('click', function() {
+            cards.forEach(c => c.classList.remove('active-card'));
+            this.classList.add('active-card');
+        });
+    });
+});
+    </scrtipt>
 </body>
 </html>
