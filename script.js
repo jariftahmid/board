@@ -20,9 +20,15 @@ async function loadArticles() {
       return;
     }
 
+    let count = 0;              // 🔹 counter
+    const MAX_ARTICLES = 2;     // 🔹 limit
+
     snapshot.forEach(docSnap => {
+      if (count >= MAX_ARTICLES) return; // 🔴 stop after 2
+
       const data = docSnap.data();
-      let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+      let badgeClass =
+        data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
 
       const a = document.createElement("a");
       a.href = `article/readarticle.html?slug=${data.slug}`;
@@ -30,7 +36,9 @@ async function loadArticles() {
         <article class="card">
           <div class="card-img">
             <img src="${data.image}" alt="${data.title}">
-            <span class="badge ${badgeClass}">${data.category.toUpperCase()}</span>
+            <span class="badge ${badgeClass}">
+              ${data.category.toUpperCase()}
+            </span>
           </div>
           <div class="card-body">
             <div class="meta-info">
@@ -38,14 +46,18 @@ async function loadArticles() {
               <span class="date">${formatDate(data.createdAt)}</span>
             </div>
             <h3>${data.title}</h3>
-            <p>${data.content.replace(/<[^>]+>/g,'').substring(0,120)}...</p>
+            <p>
+              ${data.content.replace(/<[^>]+>/g,'').substring(0,120)}...
+            </p>
             <div class="card-footer">
               <span class="read-more-btn">Read More →</span>
             </div>
           </div>
         </article>
       `;
+
       articleGrid.appendChild(a);
+      count++; // 🔹 increment
     });
 
   } catch(err) {
