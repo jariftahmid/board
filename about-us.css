@@ -187,3 +187,15 @@ body {
     .section-title { font-size: 1.8rem; }
     .container { padding: 40px 15px; }
 }
+/* Active Card Smooth Transition */
+.mv-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+}
+
+.active-card {
+    border: 2px solid var(--primary-color);
+    transform: scale(1.05) translateY(-10px); /* Ektu boro hobe */
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.25);
+    background: rgba(255, 255, 255, 0.9); /* Background ektu bright hobe */
+}
