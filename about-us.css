@@ -1,0 +1,104 @@
+/* MISSION & VISION */
+.mv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 80px 0;
+}
+
+.mv-card {
+    padding: 60px 40px;
+    border-radius: 40px;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: var(--transition-smooth);
+}
+
+.mv-icon { font-size: 50px; margin-bottom: 20px; }
+.active-card { background: var(--dark); color: white; }
+.mv-card h2 { font-size: 32px; margin-bottom: 15px; }
+
+/* JOURNEY TIMELINE */
+.journey-grid {
+    position: relative;
+    max-width: 800px;
+    margin: 60px auto;
+}
+
+.journey-item {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 50px;
+    align-items: center;
+    border-left: 3px solid var(--primary);
+    padding-left: 30px;
+    transition: var(--transition-smooth);
+}
+
+.journey-year {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+/* TEAM CARDS */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.team-card {
+    background: white;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-smooth);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.team-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 40px 80px rgba(0, 122, 255, 0.1);
+}
+
+.member-img {
+    height: 300px;
+    overflow: hidden;
+}
+
+.member-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.team-card:hover .member-img img { transform: scale(1.1); }
+
+.member-info { padding: 30px; }
+.member-info h3 { font-size: 24px; color: var(--dark); }
+.role { color: var(--primary); font-weight: 600; font-size: 14px; text-transform: uppercase; }
+
+.member-contact {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.member-contact a, .member-contact p {
+    font-size: 14px;
+    color: var(--text-main);
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.member-contact i { color: var(--primary); margin-right: 8px; }
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .team-grid, .mv-grid { grid-template-columns: 1fr; }
+    .journey-item { border-left: 2px solid var(--primary); }
+}
