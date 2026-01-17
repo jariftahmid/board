@@ -6,94 +6,118 @@
     <title>Question Viewer | Professor Jarif</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit', sans-serif; background: #f9f9f9; padding: 20px; text-align: center; }
-        .container { max-width: 850px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .error-box { padding: 40px 20px; }
-        .error-box h2 { text-transform: uppercase; font-size: 28px; margin-bottom: 5px; color: #333; }
-        .error-box p { font-size: 18px; color: #666; }
-        .q-img { width: 100%; border-radius: 10px; margin-bottom: 25px; border: 1px solid #eee; display: block; }
-        h1.title { text-transform: uppercase; font-size: 22px; color: #2d3436; margin-bottom: 30px; border-bottom: 2px solid #0984e3; display: inline-block; padding-bottom: 5px; }
-        h3 { text-align: left; color: #0984e3; margin-top: 30px; }
-        .loading { font-size: 18px; color: #888; margin-top: 50px; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .error-box {
+            padding: 40px 20px;
+        }
+        .error-box h2 {
+            text-transform: uppercase;
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+        .error-box p {
+            font-size: 18px;
+            color: #666;
+        }
+        .q-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+        }
+        h1.title {
+            font-size: 22px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0984e3;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        h3 {
+            text-align: left;
+            color: #0984e3;
+            margin-top: 30px;
+        }
+        .loading {
+            font-size: 18px;
+            color: #888;
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container" id="main-container">
-        <div id="loader" class="loading">Searching for question...</div>
-    </div>
+<div class="container" id="main-container">
+    <div class="loading">Searching for question...</div>
+</div>
 
-    <script>
-        // ১. URL থেকে ডাটা রিসিভ করা
-        const params = new URLSearchParams(window.location.search);
-        const exam = params.get('exam') || "";
-        const subject = params.get('subject') || "";
-        const board = params.get('board') || "";
-        const year = params.get('year') || "";
+<script>
+    // 1️⃣ URL params
+    const params = new URLSearchParams(window.location.search);
+    const exam = params.get("exam");      // ssc
+    const subject = params.get("subject"); // bangla / physics
+    const year = params.get("year");      // 2025
 
-        // ২. GitHub কনফিগারেশন (আপনার সঠিক তথ্য এখানে দিন)
-        const username = "jariftahmid"; // আপনার ইউজারনেম দিন
-        const repo = `bq${year}`;           // আপনার ইমেজের রেপো নাম দিন
-        const repoBase = `https://raw.githubusercontent.com/${username}/${repo}/main`;
-        
-        // স্ল্যাগ ফরম্যাট (ফোল্ডার পাথ সাধারণত ছোট হাতের হয়)
-        const slug = `${exam.toLowerCase()}/${subject.toLowerCase()}/${board.toLowerCase()}/${year}`;
+    // 2️⃣ GitHub config (FINAL)
+    const username = "jarif";
+    const repo = `bq${year}`;
+    const baseURL = `https://raw.githubusercontent.com/${username}/${repo}/main/${exam}`;
 
-        const mainContainer = document.getElementById('main-container');
+    const container = document.getElementById("main-container");
 
-        // ৩. কাস্টম এরর মেসেজ ফাংশন
-        function showNotAvailable() {
-            mainContainer.innerHTML = `
-                <div class="error-box">
-                    <h2>${exam} ${year} ${subject}</h2>
-                    <p>Sorry, question not available</p>
-                    <br>
-                    <a href="question.html" style="color: #0984e3; text-decoration: none; font-weight: 600;">← Go Back to Search</a>
-                </div>
+    // 3️⃣ Error UI
+    function showNotAvailable() {
+        container.innerHTML = `
+            <div class="error-box">
+                <h2>${exam.toUpperCase()} ${year} ${subject.toUpperCase()}</h2>
+                <p>Sorry, question not available</p>
+                <br>
+                <a href="question.html" style="color:#0984e3;font-weight:600;">← Go Back</a>
+            </div>
+        `;
+    }
+
+    // 4️⃣ Load images
+    async function loadQuestions() {
+        try {
+            const testImage = `${baseURL}/${subject}1.jpg`;
+            const res = await fetch(testImage);
+
+            if (!res.ok) return showNotAvailable();
+
+            container.innerHTML = `
+                <h1 class="title">${exam.toUpperCase()} ${year} - ${subject.toUpperCase()}</h1>
+
+                <h3>Questions</h3>
+                <img src="${baseURL}/${subject}1.jpg" class="q-img" onerror="this.style.display='none'">
+                <img src="${baseURL}/${subject}2.jpg" class="q-img" onerror="this.style.display='none'">
+                <img src="${baseURL}/${subject}3.jpg" class="q-img" onerror="this.style.display='none'">
+                <img src="${baseURL}/${subject}4.jpg" class="q-img" onerror="this.style.display='none'">
             `;
+        } catch {
+            showNotAvailable();
         }
+    }
 
-        // ৪. ইমেজ চেক এবং ডিসপ্লে লজিক
-        async function loadContent() {
-            // আমরা ১ নম্বর ইমেজটি চেক করছি ফাইল আছে কি না দেখতে
-            const checkUrl = `${repoBase}/${slug}/1.jpg`;
+    // 5️⃣ Init
+    if (exam && subject && year) {
+        loadQuestions();
+    } else {
+        container.innerHTML = "<h2>Invalid Request</h2>";
+    }
+</script>
 
-            try {
-                const response = await fetch(checkUrl);
-                
-                if (response.status === 404) {
-                    // যদি ৪-০-৪ এরর হয়, তবে আপনার কাস্টম মেসেজ দেখাবে
-                    showNotAvailable();
-                } else {
-                    // যদি ফাইল পাওয়া যায়, তবে ইমেজগুলো শো করবে
-                    mainContainer.innerHTML = `
-                        <h1 class="title">${exam} ${year} - ${subject} (${board})</h1>
-                        
-                        <div class="exam-section">
-                            <h3>MCQ Questions</h3>
-                            <img src="${repoBase}/${slug}/1.jpg" class="q-img" onerror="this.style.display='none'">
-                            <img src="${repoBase}/${slug}/2.jpg" class="q-img" onerror="this.style.display='none'">
-                        </div>
-
-                        <div class="exam-section">
-                            <h3>CQ Questions</h3>
-                            <img src="${repoBase}/${slug}/3.jpg" class="q-img" onerror="this.style.display='none'">
-                            <img src="${repoBase}/${slug}/4.jpg" class="q-img" onerror="this.style.display='none'">
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                // ইন্টারনেট অফ থাকলে বা অন্য টেকনিক্যাল এরর হলে
-                showNotAvailable();
-            }
-        }
-
-        // ৫. সবকিছু ঠিক থাকলে রান করবে
-        if (exam && subject && year) {
-            loadContent();
-        } else {
-            mainContainer.innerHTML = "<h2>Invalid Request!</h2>";
-        }
-    </script>
 </body>
 </html>
