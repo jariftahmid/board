@@ -81,6 +81,10 @@
                 <button type="submit" class="btn-search">Search Now</button>
             </form>
         </aside>
+
+        <section id="result-display" class="result-container" style="display: none; padding: 20px; flex-grow: 1;">
+            <div id="content-wrap"></div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -88,13 +92,13 @@
     </footer>
 
     <script>
+        // --- ড্রপডাউন ফাংশনালিটি ---
         document.querySelectorAll('.custom-select').forEach(select => {
             const trigger = select.querySelector('.select-trigger');
             const options = select.querySelectorAll('.option');
             const hiddenInput = select.parentElement.querySelector('input[type="hidden"]');
 
             trigger.addEventListener('click', () => {
-                // ক্লোজ অন্য সব ড্রপডাউন
                 document.querySelectorAll('.custom-select').forEach(other => {
                     if (other !== select) other.classList.remove('open');
                 });
@@ -106,7 +110,6 @@
                     trigger.querySelector('span').innerText = opt.innerText;
                     hiddenInput.value = opt.dataset.value;
                     select.classList.remove('open');
-                    
                     options.forEach(o => o.classList.remove('selected'));
                     opt.classList.add('selected');
                 });
@@ -118,7 +121,63 @@
                 document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
             }
         });
+
+        // --- স্মার্ট লিঙ্ক জেনারেটর এবং ইমেজ হ্যান্ডলিং ---
+        
+        // ইমেজ না থাকলে মেসেজ দেখানোর ফাংশন
+        function handleImgError(img, message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = "not-available-msg";
+            errorDiv.innerHTML = `<p>${message}</p>`;
+            img.replaceWith(errorDiv); // ইমেজটি সরিয়ে মেসেজ বসাবে
+        }
+
+        // ঐচ্ছিক ইমেজ (যেমন ২য় পাতা) না থাকলে হাইড করার ফাংশন
+        function hideOptionalImg(img) {
+            img.style.display = 'none';
+        }
+
+        document.getElementById('redirectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const exam = document.getElementById('exam').value;
+            const subject = document.getElementById('subject').value;
+            const board = document.getElementById('board').value;
+            const year = document.getElementById('year').value;
+
+            if (!exam || !subject || !board || !year) {
+                alert("সবগুলো তথ্য সিলেক্ট করুন");
+                return;
+            }
+
+            // স্লাগ তৈরি এবং অন্য রিপোজিটরির লিঙ্ক
+            // GitHub Raw লিঙ্ক ফরম্যাট: https://raw.githubusercontent.com/ইউজারনেম/রেপো-নাম/শাখা/ফোল্ডার/ফাইল
+            const repoBase = "https://raw.githubusercontent.com/YOUR_GITHUB_USER/YOUR_REPO_NAME/main";
+            const slug = `${exam}/${subject}/${board}/${year}`;
+            
+            const resultSection = document.getElementById('result-display');
+            const contentWrap = document.getElementById('content-wrap');
+
+            resultSection.style.display = 'block';
+            
+            contentWrap.innerHTML = `
+                <div class="question-header">
+                    <h2 style="text-transform: uppercase;">${exam} ${year} - ${subject} (${board} Board)</h2>
+                </div>
+                
+                <div class="exam-section">
+                    <h3>MCQ Questions</h3>
+                    <img src="${repoBase}/${slug}/1.jpg" alt="" onerror="handleImgError(this, 'MCQ not available')">
+                    <img src="${repoBase}/${slug}/2.jpg" alt="" onerror="hideOptionalImg(this)">
+                </div>
+
+                <div class="exam-section" style="margin-top: 30px;">
+                    <h3>CQ Questions</h3>
+                    <img src="${repoBase}/${slug}/3.jpg" alt="" onerror="handleImgError(this, 'CQ not available')">
+                    <img src="${repoBase}/${slug}/4.jpg" alt="" onerror="hideOptionalImg(this)">
+                </div>
+            `;
+        });
     </script>
 </body>
 </html>
-
