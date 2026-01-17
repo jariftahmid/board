@@ -25,7 +25,6 @@
         <aside class="search-sidebar" id="search-section">
             <h2 class="section-title">Question Search</h2>
             <form id="redirectForm">
-                
                 <div class="form-group">
                     <label>Exam Type</label>
                     <div class="custom-select" data-id="exam">
@@ -81,10 +80,6 @@
                 <button type="submit" class="btn-search">Search Now</button>
             </form>
         </aside>
-
-        <section id="result-display" class="result-container" style="display: none; padding: 20px; flex-grow: 1;">
-            <div id="content-wrap"></div>
-        </section>
     </main>
 
     <footer class="footer">
@@ -92,7 +87,7 @@
     </footer>
 
     <script>
-        // --- ড্রপডাউন ফাংশনালিটি ---
+        // ড্রপডাউন হ্যান্ডলিং
         document.querySelectorAll('.custom-select').forEach(select => {
             const trigger = select.querySelector('.select-trigger');
             const options = select.querySelectorAll('.option');
@@ -116,89 +111,22 @@
             });
         });
 
-        window.addEventListener('click', (e) => {
-            if (!e.target.closest('.custom-select')) {
-                document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
-            }
-        });
-
-        // --- স্মার্ট লিঙ্ক জেনারেটর এবং ইমেজ হ্যান্ডলিং ---
-        
-        // ইমেজ না থাকলে মেসেজ দেখানোর ফাংশন
-        function handleImgError(img, message) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = "not-available-msg";
-            errorDiv.innerHTML = `<p>${message}</p>`;
-            img.replaceWith(errorDiv); // ইমেজটি সরিয়ে মেসেজ বসাবে
-        }
-
-        // ঐচ্ছিক ইমেজ (যেমন ২য় পাতা) না থাকলে হাইড করার ফাংশন
-        function hideOptionalImg(img) {
-            img.style.display = 'none';
-        }
-
+        // অন্য পেজে রিডাইরেক্ট করা
         document.getElementById('redirectForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const exam = document.getElementById('exam').value;
             const subject = document.getElementById('subject').value;
             const board = document.getElementById('board').value;
             const year = document.getElementById('year').value;
 
             if (!exam || !subject || !board || !year) {
-                alert("সবগুলো তথ্য সিলেক্ট করুন");
+                alert("Please select all fields!");
                 return;
             }
 
-            // স্লাগ তৈরি এবং অন্য রিপোজিটরির লিঙ্ক
-            // GitHub Raw লিঙ্ক ফরম্যাট: https://raw.githubusercontent.com/ইউজারনেম/রেপো-নাম/শাখা/ফোল্ডার/ফাইল
-            const repoBase = "https://raw.githubusercontent.com/YOUR_GITHUB_USER/YOUR_REPO_NAME/main";
-            const slug = `${exam}/${subject}/${board}/${year}`;
-            
-            const resultSection = document.getElementById('result-display');
-            const contentWrap = document.getElementById('content-wrap');
-
-            resultSection.style.display = 'block';
-            
-            contentWrap.innerHTML = `
-                <div class="question-header">
-                    <h2 style="text-transform: uppercase;">${exam} ${year} - ${subject} (${board} Board)</h2>
-                </div>
-                
-                <div class="exam-section">
-                    <h3>MCQ Questions</h3>
-                    <img src="${repoBase}/${slug}/1.jpg" alt="" onerror="handleImgError(this, 'MCQ not available')">
-                    <img src="${repoBase}/${slug}/2.jpg" alt="" onerror="hideOptionalImg(this)">
-                </div>
-
-                <div class="exam-section" style="margin-top: 30px;">
-                    <h3>CQ Questions</h3>
-                    <img src="${repoBase}/${slug}/3.jpg" alt="" onerror="handleImgError(this, 'CQ not available')">
-                    <img src="${repoBase}/${slug}/4.jpg" alt="" onerror="hideOptionalImg(this)">
-                </div>
-            `;
+            const queryParams = `exam=${exam}&subject=${subject}&board=${board}&year=${year}`;
+            window.location.href = `display.html?${queryParams}`; 
         });
-        // --- আগের ড্রপডাউন কোড একই থাকবে ---
-
-document.getElementById('redirectForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const exam = document.getElementById('exam').value;
-    const subject = document.getElementById('subject').value;
-    const board = document.getElementById('board').value;
-    const year = document.getElementById('year').value;
-
-    if (!exam || !subject || !board || !year) {
-        alert("সবগুলো তথ্য সিলেক্ট করুন");
-        return;
-    }
-
-    // URL তৈরি করে অন্য পেজে পাঠানো
-    // এটি দেখতে এমন হবে: display.html?exam=ssc&subject=physics&board=dhaka&year=2025
-    const queryParams = `exam=${exam}&subject=${subject}&board=${board}&year=${year}`;
-    window.location.href = `display.html?${queryParams}`; 
-});
     </script>
 </body>
 </html>
-
