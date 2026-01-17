@@ -64,5 +64,9 @@ async function loadArticles() {
     articleGrid.innerHTML = `<p>Error loading articles: ${err.message}</p>`;
   }
 }
-
+document.getElementById('scroll-to-search').addEventListener('click', function() {
+    // Apnar file-er path ba URL ekhane din
+    const filePath = 'question.html'; 
+});
 window.addEventListener("DOMContentLoaded", loadArticles);
+
