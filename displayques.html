@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question View | Professor Jarif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <style>
+        .question-container { max-width: 800px; margin: 50px auto; padding: 20px; text-align: center; }
+        .exam-section img { width: 100%; height: auto; margin-bottom: 20px; display: block; border-radius: 8px; }
+        .not-available-msg { background: #fee2e2; color: #dc2626; padding: 15px; border-radius: 8px; margin: 10px 0; font-weight: 600; }
+        h1 { text-transform: uppercase; margin-bottom: 30px; color: #333; }
+        h3 { text-align: left; border-left: 5px solid #007bff; padding-left: 10px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <div class="question-container">
+        <h1 id="page-title">Loading Question...</h1>
+        
+        <div class="exam-section">
+            <h3>MCQ Questions</h3>
+            <div id="mcq-area"></div>
+        </div>
+
+        <div class="exam-section">
+            <h3>CQ Questions</h3>
+            <div id="cq-area"></div>
+        </div>
+    </div>
+
+    <script>
+        // ১. ইউআরএল থেকে ডাটা সংগ্রহ করা
+        const urlParams = new URLSearchParams(window.location.search);
+        const exam = urlParams.get('exam');
+        const subject = urlParams.get('subject');
+        const board = urlParams.get('board');
+        const year = urlParams.get('year');
+
+        // ২. আপনার অন্য রিপোজিটরির বেস লিঙ্ক (এখানে আপনারটা বসান)
+        const repoBase = "https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main";
+        const slug = `${exam}/${subject}/${board}/${year}`;
+
+        // ৩. পেজ টাইটেল সেট করা
+        if(exam) {
+            document.getElementById('page-title').innerText = `${exam} ${year} - ${subject} (${board})`;
+        }
+
+        // ৪. ইমেজ লোড এবং এরর হ্যান্ডলিং ফাংশন
+        function loadImage(containerId, imgName, errorMsg, isOptional = false) {
+            const container = document.getElementById(containerId);
+            const img = new Image();
+            img.src = `${repoBase}/${slug}/${imgName}`;
+            
+            img.onload = function() {
+                container.appendChild(img);
+            };
+
+            img.onerror = function() {
+                if (!isOptional) {
+                    const div = document.createElement('div');
+                    div.className = "not-available-msg";
+                    div.innerText = errorMsg;
+                    container.appendChild(div);
+                }
+                // ঐচ্ছিক (Optional) ইমেজ হলে কিছুই করবে না (হাইড থাকবে)
+            };
+        }
+
+        // ৫. ইমেজগুলো কল করা
+        if (exam && subject && board && year) {
+            loadImage('mcq-area', '1.jpg', 'MCQ not available'); // MCQ ১ম পাতা
+            loadImage('mcq-area', '2.jpg', '', true);             // MCQ ২য় পাতা (ঐচ্ছিক)
+            
+            loadImage('cq-area', '3.jpg', 'CQ not available');   // CQ ১ম পাতা
+            loadImage('cq-area', '4.jpg', '', true);             // CQ ২য় পাতা (ঐচ্ছিক)
+        } else {
+            document.getElementById('page-title').innerText = "No data selected!";
+        }
+    </script>
+</body>
+</html>
