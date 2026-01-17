@@ -178,6 +178,27 @@
                 </div>
             `;
         });
+        // --- আগের ড্রপডাউন কোড একই থাকবে ---
+
+document.getElementById('redirectForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const exam = document.getElementById('exam').value;
+    const subject = document.getElementById('subject').value;
+    const board = document.getElementById('board').value;
+    const year = document.getElementById('year').value;
+
+    if (!exam || !subject || !board || !year) {
+        alert("সবগুলো তথ্য সিলেক্ট করুন");
+        return;
+    }
+
+    // URL তৈরি করে অন্য পেজে পাঠানো
+    // এটি দেখতে এমন হবে: display.html?exam=ssc&subject=physics&board=dhaka&year=2025
+    const queryParams = `exam=${exam}&subject=${subject}&board=${board}&year=${year}`;
+    window.location.href = `display.html?${queryParams}`; 
+});
     </script>
 </body>
 </html>
+
