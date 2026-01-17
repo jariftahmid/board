@@ -65,8 +65,8 @@ async function loadArticles() {
   }
 }
 document.getElementById('scroll-to-search').addEventListener('click', function() {
-    // Apnar file-er path ba URL ekhane din
     const filePath = 'question.html'; 
+    window.open(filePath, '_blank');
 });
-window.addEventListener("DOMContentLoaded", loadArticles);
 
+window.addEventListener("DOMContentLoaded", loadArticles);
