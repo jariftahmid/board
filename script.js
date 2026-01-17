@@ -66,7 +66,8 @@ async function loadArticles() {
 }
 document.getElementById('scroll-to-search').addEventListener('click', function() {
     const filePath = 'question.html'; 
-    window.open(filePath, '_blank');
+    window.open(filePath, '_self');
 });
 
 window.addEventListener("DOMContentLoaded", loadArticles);
+
