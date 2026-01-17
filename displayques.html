@@ -35,44 +35,65 @@
     </div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const exam = params.get('exam');
-        const subject = params.get('subject');
-        const board = params.get('board');
-        const year = params.get('year');
+    const params = new URLSearchParams(window.location.search);
+    const exam = params.get('exam') || "";
+    const subject = params.get('subject') || "";
+    const board = params.get('board') || "";
+    const year = params.get('year') || "";
 
-        // আপনার অন্য রিপোজিটরি লিঙ্ক এখানে দিন
-        const repoBase = "https://raw.githubusercontent.com/YOUR_GITHUB_USER/YOUR_REPO_NAME/main";
-        const slug = `${exam}/${subject}/${board}/${year}`;
+    // GitHub Repo Info
+    const username = "YOUR_GITHUB_USERNAME"; 
+    const repo = "YOUR_REPO_NAME";           
+    const repoBase = `https://raw.githubusercontent.com/${username}/${repo}/main`;
+    const slug = `${exam.toLowerCase()}/${subject.toLowerCase()}/${board.toLowerCase()}/${year}`;
 
-        if(exam) {
-            document.getElementById('header-title').innerText = `${exam} ${year} - ${subject} (${board})`;
-        }
+    const headerTitle = document.getElementById('header-title');
+    const mcqArea = document.getElementById('mcq-area');
+    const cqArea = document.getElementById('cq-area');
 
-        function addImage(containerId, fileName, errorLabel, isOptional = false) {
-            const container = document.getElementById(containerId);
-            const img = new Image();
-            img.src = `${repoBase}/${slug}/${fileName}`;
-            
-            img.onload = () => container.appendChild(img);
-            img.onerror = () => {
-                if(!isOptional) {
-                    const msg = document.createElement('div');
-                    msg.className = "not-available";
-                    msg.innerText = errorLabel;
-                    container.appendChild(msg);
-                }
-            };
-        }
+    if(exam) {
+        headerTitle.innerText = `${exam.toUpperCase()} ${year} - ${subject.toUpperCase()} (${board.toUpperCase()} BOARD)`;
+    }
 
-        // ইমেজ লোড করা (১ ও ৩ বাধ্যতামূলক, ২ ও ৪ ঐচ্ছিক)
-        if(exam && subject && board && year) {
-            addImage('mcq-wrap', '1.jpg', 'MCQ not available');
-            addImage('mcq-wrap', '2.jpg', '', true);
-            
-            addImage('cq-wrap', '3.jpg', 'CQ not available');
-            addImage('cq-wrap', '4.jpg', '', true);
-        }
-    </script>
+    // Custom Error Message Function
+    function showErrorMessage() {
+        const errorContent = `
+            <div style="text-align: center; margin-top: 50px;">
+                <h2 style="text-transform: uppercase;">${exam} ${year} ${subject}</h2>
+                <p style="font-size: 1.2rem; color: #555;">Sorry, question not available</p>
+            </div>
+        `;
+        document.querySelector('.container').innerHTML = errorContent;
+    }
+
+    function fetchImage(containerId, fileName, isMain = false) {
+        const container = document.getElementById(containerId);
+        const img = new Image();
+        img.src = `${repoBase}/${slug}/${fileName}`;
+
+        img.onload = function() {
+            container.appendChild(img);
+        };
+
+        img.onerror = function() {
+            if (isMain) {
+                // Jodi 1.jpg na pay, tahole custom error message dekhabe
+                showErrorMessage();
+            } else {
+                img.style.display = 'none'; // Optional image na thakle hide thakbe
+            }
+        };
+    }
+
+    // Logic: 1.jpg ke main dhora hoyeche
+    if (exam && subject && board && year) {
+        fetchImage('mcq-area', '1.jpg', true);  // MCQ 1 (Main)
+        fetchImage('mcq-area', '2.jpg', false); // MCQ 2
+        fetchImage('cq-area', '3.jpg', false);  // CQ 1
+        fetchImage('cq-area', '4.jpg', false);  // CQ 2
+    } else {
+        headerTitle.innerText = "Invalid Search!";
+    }
+</script>
 </body>
 </html>
