@@ -2,13 +2,16 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/f
 
 const articleGrid = document.getElementById("articleGrid");
 
+// --- ১. ডেট ফরম্যাট ফাংশন ---
 const formatDate = (timestamp) => {
   if (!timestamp) return "";
   const date = new Date(timestamp.seconds * 1000);
   return date.toLocaleDateString("en-US", { day:'2-digit', month:'short', year:'numeric' });
 };
 
+// --- ২. আর্টিকেল লোড করার ফাংশন ---
 async function loadArticles() {
+  if(!articleGrid) return; // Grid না থাকলে যেন এরর না দেয়
   articleGrid.innerHTML = "Loading...";
 
   try {
@@ -20,15 +23,14 @@ async function loadArticles() {
       return;
     }
 
-    let count = 0;              // 🔹 counter
-    const MAX_ARTICLES = 2;     // 🔹 limit
+    let count = 0;             
+    const MAX_ARTICLES = 2;    
 
     snapshot.forEach(docSnap => {
-      if (count >= MAX_ARTICLES) return; // 🔴 stop after 2
+      if (count >= MAX_ARTICLES) return; 
 
       const data = docSnap.data();
-      let badgeClass =
-        data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+      let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
 
       const a = document.createElement("a");
       a.href = `article/readarticle.html?slug=${data.slug}`;
@@ -57,17 +59,47 @@ async function loadArticles() {
       `;
 
       articleGrid.appendChild(a);
-      count++; // 🔹 increment
+      count++; 
     });
 
   } catch(err) {
     articleGrid.innerHTML = `<p>Error loading articles: ${err.message}</p>`;
   }
 }
-document.getElementById('scroll-to-search').addEventListener('click', function() {
-    const filePath = 'question.html'; 
-    window.open(filePath, '_self');
+
+// --- ৩. মোবাইল মেনু ফাংশনালিটি (নতুন যোগ করা হয়েছে) ---
+function initMobileMenu() {
+    const menu = document.querySelector('#mobile-menu');
+    const menuLinks = document.querySelector('.nav-links');
+
+    if (menu && menuLinks) {
+        menu.addEventListener('click', function() {
+            menu.classList.toggle('is-active');
+            menuLinks.classList.toggle('active');
+        });
+
+        // মেনু লিঙ্কে ক্লিক করলে মেনু ক্লোজ হবে
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.remove('is-active');
+                menuLinks.classList.remove('active');
+            });
+        });
+    }
+}
+
+// --- ৪. ইভেন্ট লিসেনারস ---
+
+// ব্রাউজ বাটন ক্লিক
+const scrollBtn = document.getElementById('scroll-to-search');
+if(scrollBtn) {
+    scrollBtn.addEventListener('click', function() {
+        window.open('question.html', '_self');
+    });
+}
+
+// পেজ লোড হলে সব শুরু হবে
+window.addEventListener("DOMContentLoaded", () => {
+    loadArticles();
+    initMobileMenu();
 });
-
-window.addEventListener("DOMContentLoaded", loadArticles);
-
