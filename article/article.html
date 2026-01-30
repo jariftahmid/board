@@ -11,15 +11,22 @@
 <body>
 
     <nav class="navbar">
-        <div class="logo">BoardQues</div>
-        <ul class="nav-links">
-            <li class="center"><a href="../index.html">Home</a></li>
-            <li class="center"><a href="../question.html">Questions</a></li>
-            <li class="center"><a href="article.html" id="article-nav">Articles</a></li>
-            <li class="center"><a href="#">Teacher's Corner</a></li>
-            <li class="center"><a href="../about-us.html">About Us</a></li>
-        </ul>
-    </nav>
+    <div class="logo">BoardQues</div>
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <ul class="nav-links">
+        <li class="center"><a href="index.html" id="home-nav">Home</a></li>
+        <li class="center"><a href="question.html">Questions</a></li>
+        <li class="center"><a href="article/article.html">Articles</a></li>
+        <li class="center"><a href="#">Teacher's Corner</a></li>
+        <li class="center"><a href="about-us.html">About Us</a></li>
+    </ul>
+</nav>
 
     <!-- <div class="article-grid">
                 <a href="#"><article class="card">
@@ -100,6 +107,7 @@
     </footer>
     <script type="module" src="firebase.js"></script>
     <script type="module"src="article.js"></script>
+    <script type="module" src="../script.js"></script>
 </body>
 
 </html>
