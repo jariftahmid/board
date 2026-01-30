@@ -3,20 +3,40 @@ from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const articleContent = document.getElementById("articleContent");
 
-// Get slug from URL query
+// URL থেকে স্লাগ (slug) নেওয়া
 const params = new URLSearchParams(window.location.search);
 const slug = params.get("slug");
 
-// Format date like "10 Nov 2025"
+// ডেট ফরম্যাট করার ফাংশন
 const formatDate = (timestamp) => {
   if (!timestamp) return "";
   const date = new Date(timestamp.seconds * 1000);
   return date.toLocaleDateString("en-US", { day:'2-digit', month:'short', year:'numeric' });
 };
 
+// মোবাইল মেনু ফাংশনালিটি
+function initMobileMenu() {
+    const menu = document.querySelector('#mobile-menu');
+    const menuLinks = document.querySelector('.nav-links');
+
+    // চেক করা হচ্ছে এলিমেন্টগুলো পেজে আছে কি না
+    if (menu && menuLinks) {
+        menu.addEventListener('click', function() {
+            menu.classList.toggle('is-active');
+            menuLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(n => n.addEventListener('click', () => {
+            menu.classList.remove('is-active');
+            menuLinks.classList.remove('active');
+        }));
+    }
+}
+
+// আর্টিকেল লোড করার ফাংশন
 async function loadArticle() {
   if (!slug) {
-    articleContent.innerHTML = "<p>No article specified</p>";
+    if(articleContent) articleContent.innerHTML = "<p>No article specified</p>";
     return;
   }
 
@@ -25,42 +45,47 @@ async function loadArticle() {
     const snap = await getDocs(q);
 
     if (snap.empty) {
-      articleContent.innerHTML = "<p>Article not found</p>";
+      if(articleContent) articleContent.innerHTML = "<p>Article not found</p>";
       return;
     }
 
     snap.forEach(docSnap => {
       const data = docSnap.data();
 
-      // Dynamic page title
-      document.title = data.title + " | Professor Jarif";
+      // ডাইনামিক পেজ টাইটেল
+      document.title = data.title + " | BoardQues";
 
-      // Badge color
+      // ব্যাজ ক্লাস নির্ধারণ
       let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
 
-      // Inject content
-      articleContent.innerHTML = `
-        <h1>${data.title}</h1>
-        <p class="meta">
-          <span class="badge ${badgeClass}">${data.category.toUpperCase()}</span>
-          <span class="subject">${data.subject}</span>
-          <span class="date">${formatDate(data.createdAt)}</span>
-        </p>
-        <img src="${data.image}" alt="${data.title}">
-        <div id="article-body">${data.content}</div>
-      `;
+      // কন্টেন্ট ইনজেক্ট করা
+      if(articleContent) {
+          articleContent.innerHTML = `
+            <h1>${data.title}</h1>
+            <p class="meta">
+              <span class="badge ${badgeClass}">${data.category.toUpperCase()}</span>
+              <span class="subject">${data.subject}</span>
+              <span class="date">${formatDate(data.createdAt)}</span>
+            </p>
+            <img src="${data.image}" alt="${data.title}" style="max-width:100%; border-radius:20px; margin: 20px 0;">
+            <div id="article-body">${data.content}</div>
+          `;
+      }
 
-      // Render LaTeX / Math formulas
+      // MathJax রেন্ডারিং (যদি ম্যাথ ইকুয়েশন থাকে)
       if (window.MathJax) {
         MathJax.typesetPromise([document.getElementById("article-body")]);
       }
     });
 
   } catch (err) {
-    articleContent.innerHTML = `<p>Error loading article: ${err.message}</p>`;
+    if(articleContent) articleContent.innerHTML = `<p>Error loading article: ${err.message}</p>`;
     console.error(err);
   }
 }
 
-// DOM ready
-window.addEventListener("DOMContentLoaded", loadArticle);
+// পেজ লোড হলে ফাংশনগুলো রান করবে
+window.addEventListener("DOMContentLoaded", () => {
+    loadArticle();
+    initMobileMenu();
+});
