@@ -10,3 +10,124 @@ a {
     color:#2980b9 !important;
     font-weight: 700;
 }
+/* General Setup (Optional) */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+}
+
+/* Card Container Styling */
+a {
+    text-decoration: none; /* লিংক এর নিচে দাগ দূর করবে */
+    color: inherit;
+}
+
+.card {
+    width: 350px;
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Hover Effect */
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Image Section */
+.card-img {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.card:hover .card-img img {
+    transform: scale(1.1);
+}
+
+/* Badge Styling */
+.hsc-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #ff4757;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(255, 71, 87, 0.4);
+}
+
+/* Card Body Styling */
+.card-body {
+    padding: 20px;
+}
+
+.meta-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #7f8c8d;
+}
+
+.category {
+    color: #3742fa;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Title & Description */
+h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: #2f3542;
+    line-height: 1.3;
+}
+
+p {
+    font-size: 14px;
+    color: #57606f;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Footer & Button */
+.card-footer {
+    border-top: 1px solid #f1f2f6;
+    padding-top: 15px;
+}
+
+.read-more-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #3742fa;
+    transition: gap 0.3s ease;
+}
+
+.card:hover .read-more-btn {
+    gap: 15px;
+}
+
+.read-more-btn span {
+    font-size: 18px;
+}

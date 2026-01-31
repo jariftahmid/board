@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoardQues | Board Question Bank</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoardQues | Board Question Bank</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 🔔 Firebase SDKs (FCM needs these) -->
+    <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js"></script>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar">
+<!-- Navbar -->
+<nav class="navbar">
     <div class="logo">BoardQues</div>
-    
+
     <div class="menu-toggle" id="mobile-menu">
         <span class="bar"></span>
         <span class="bar"></span>
@@ -28,114 +33,133 @@
     </ul>
 </nav>
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <div class="hero-content">
-            <h1>Study Less Confused,<br><span class="highlight">Score More Confident.</span></h1>
-            <p>Dedicated to empowering SSC and HSC students with reliable board questions, well-explained solutions, and concept-based articles for long-term academic success.</p>
-            <button class="btn-primary" id="scroll-to-search">Browse Questions</button>
-        </div>
-        <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Students Studying">
-        </div>
-    </header>
+<!-- Hero Section -->
+<header class="hero">
+    <div class="hero-content">
+        <h1>
+            Study Less Confused,<br>
+            <span class="highlight">Score More Confident.</span>
+        </h1>
 
-    <!-- Popular Articles -->
-    <main class="articles" id="articles-section">
-        <div class="section-header">
-            <h2 class="section-title">Popular Articles</h2>
-            <a href="article/article.html" class="view-all">View All Articles</a>
-        </div>
+        <p>
+            Dedicated to empowering SSC and HSC students with reliable board questions,
+            well-explained solutions, and concept-based articles for long-term academic success.
+        </p>
 
-        <div class="article-grid" id="articleGrid"></div>
-    </main>
+        <button class="btn-primary" id="scroll-to-search">
+            Browse Questions
+        </button>
 
-    <!-- 4️⃣ Why Choose Us -->
-    <section class="why-us">
-        <h2 class="section-title">Why Choose Us?</h2>
-        <div class="why-grid">
-            <div class="why-card">
-                <h3>📘 Board Focused</h3>
-                <p>SSC ও HSC বোর্ড পরীক্ষার জন্য আলাদা করে প্রস্তুত কনটেন্ট।</p>
-            </div>
-            <div class="why-card">
-                <h3>🎯 Exam Oriented</h3>
-                <p>পরীক্ষায় সরাসরি কাজে লাগবে এমন প্রশ্ন ও নোট।</p>
-            </div>
-            <div class="why-card">
-                <h3>👨‍🎓 Student Friendly</h3>
-                <p>সহজ ভাষায় ব্যাখ্যা, যেন সবাই বুঝতে পারে।</p>
-            </div>
-            <div class="why-card">
-                <h3>🆓 100% Free</h3>
-                <p>কোনো সাবস্ক্রিপশন ছাড়াই সম্পূর্ণ ফ্রি।</p>
-            </div>
-        </div>
-    </section>
+        <!-- 🔔 Enable Notification Button -->
+        <button class="btn-primary" id="enableNotificationBtn" style="margin-top:12px;">
+            🔔 Enable Article Notifications
+        </button>
+    </div>
 
-    <!-- 7️⃣ Search Section -->
-    <section class="search-section">
-        <h2 class="section-title">Search Questions & Articles</h2>
-        <input 
-            type="text" 
-            id="searchInput" 
-            class="search-box"
-            placeholder="Search by subject, chapter or topic..."
-        >
-    </section>
+    <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" alt="Students Studying">
+    </div>
+</header>
 
-    <!-- 5️⃣ Latest Updates -->
-    <section class="updates">
-        <h2 class="section-title">Latest Updates</h2>
-        <ul class="update-list">
-            <li>🔔 HSC Physics Chapter 3 Suggestion Added</li>
-            <li>🔔 SSC Math Short Notes Uploaded</li>
-            <li>🔔 New English Grammar Article Published</li>
-        </ul>
-    </section>
+<!-- Popular Articles -->
+<main class="articles" id="articles-section">
+    <div class="section-header">
+        <h2 class="section-title">Popular Articles</h2>
+        <a href="article/article.html" class="view-all">View All Articles</a>
+    </div>
 
-    <!-- 6️⃣ Teacher’s Corner -->
-    <section class="teachers-corner">
-        <h2 class="section-title">Teacher's Corner</h2>
-        <p class="coming-soon">
-            অভিজ্ঞ শিক্ষকদের নোট, ট্রিকস ও সাজেশন খুব শীঘ্রই আসছে...
-        </p>
-    </section>
+    <div class="article-grid" id="articleGrid"></div>
+</main>
 
-    <!-- 8️⃣ Statistics -->
-    <section class="stats">
-        <div class="stat-card">
-            <h3>📄 500+</h3>
-            <p>Board Questions</p>
-        </div>
-        <div class="stat-card">
-            <h3>🧠 100+</h3>
-            <p>Articles</p>
-        </div>
-        <div class="stat-card">
-            <h3>🎓 10,000+</h3>
-            <p>Students Helped</p>
-        </div>
-        <div class="stat-card">
-            <h3>⏱ Weekly</h3>
-            <p>Updated</p>
-        </div>
-    </section>
+<!-- Why Choose Us -->
+<section class="why-us">
+    <h2 class="section-title">Why Choose Us?</h2>
+    <div class="why-grid">
+        <div class="why-card">
+            <h3>📘 Board Focused</h3>
+            <p>SSC ও HSC বোর্ড পরীক্ষার জন্য আলাদা করে প্রস্তুত কনটেন্ট।</p>
+        </div>
+        <div class="why-card">
+            <h3>🎯 Exam Oriented</h3>
+            <p>পরীক্ষায় সরাসরি কাজে লাগবে এমন প্রশ্ন ও নোট।</p>
+        </div>
+        <div class="why-card">
+            <h3>👨‍🎓 Student Friendly</h3>
+            <p>সহজ ভাষায় ব্যাখ্যা, যেন সবাই বুঝতে পারে।</p>
+        </div>
+        <div class="why-card">
+            <h3>🆓 100% Free</h3>
+            <p>কোনো সাবস্ক্রিপশন ছাড়াই সম্পূর্ণ ফ্রি।</p>
+        </div>
+    </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2025 BoardQues. All rights reserved.</p>
-    </footer>
+<!-- Search -->
+<section class="search-section">
+    <h2 class="section-title">Search Questions & Articles</h2>
+    <input
+        type="text"
+        id="searchInput"
+        class="search-box"
+        placeholder="Search by subject, chapter or topic..."
+    >
+</section>
 
-    <!-- Firebase + Article JS -->
-    <script type="module" src="article/firebase.js"></script>
-    <script type="module" src="script.js"></script>
+<!-- Latest Updates -->
+<section class="updates">
+    <h2 class="section-title">Latest Updates</h2>
+    <ul class="update-list">
+        <li>🔔 HSC Physics Chapter 3 Suggestion Added</li>
+        <li>🔔 SSC Math Short Notes Uploaded</li>
+        <li>🔔 New English Grammar Article Published</li>
+    </ul>
+</section>
+
+<!-- Teacher’s Corner -->
+<section class="teachers-corner">
+    <h2 class="section-title">Teacher's Corner</h2>
+    <p class="coming-soon">
+        অভিজ্ঞ শিক্ষকদের নোট, ট্রিকস ও সাজেশন খুব শীঘ্রই আসছে...
+    </p>
+</section>
+
+<!-- Statistics -->
+<section class="stats">
+    <div class="stat-card">
+        <h3>📄 500+</h3>
+        <p>Board Questions</p>
+    </div>
+    <div class="stat-card">
+        <h3>🧠 100+</h3>
+        <p>Articles</p>
+    </div>
+    <div class="stat-card">
+        <h3>🎓 10,000+</h3>
+        <p>Students Helped</p>
+    </div>
+    <div class="stat-card">
+        <h3>⏱ Weekly</h3>
+        <p>Updated</p>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2025 BoardQues. All rights reserved.</p>
+</footer>
+
+<!-- 🔔 Service Worker Register (REQUIRED for FCM) -->
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then(() => console.log('Service Worker Registered'))
+            .catch(err => console.error('SW registration failed', err));
+    }
+</script>
+
+<!-- Firebase + Article JS -->
+<script type="module" src="article/firebase.js"></script>
+<script type="module" src="script.js"></script>
 
 </body>
 </html>
-
-
-
-
-
-

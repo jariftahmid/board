@@ -1,17 +1,42 @@
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+/* ===========================
+   🔥 FIREBASE IMPORTS
+=========================== */
+import { collection, getDocs, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
+import { 
+  getMessaging, 
+  getToken, 
+  onMessage 
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js";
+
+
+/* ===========================
+   🔥 DOM ELEMENTS
+=========================== */
 const articleGrid = document.getElementById("articleGrid");
+const enableNotificationBtn = document.getElementById("enableNotificationBtn");
 
-// --- ১. ডেট ফরম্যাট ফাংশন ---
+
+/* ===========================
+   🔥 DATE FORMAT
+=========================== */
 const formatDate = (timestamp) => {
   if (!timestamp) return "";
   const date = new Date(timestamp.seconds * 1000);
-  return date.toLocaleDateString("en-US", { day:'2-digit', month:'short', year:'numeric' });
+  return date.toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
 };
 
-// --- ২. আর্টিকেল লোড করার ফাংশন ---
+
+/* ===========================
+   🔥 LOAD ARTICLES
+=========================== */
 async function loadArticles() {
-  if(!articleGrid) return; // Grid না থাকলে যেন এরর না দেয়
+  if (!articleGrid) return;
   articleGrid.innerHTML = "Loading...";
 
   try {
@@ -23,14 +48,17 @@ async function loadArticles() {
       return;
     }
 
-    let count = 0;             
-    const MAX_ARTICLES = 2;    
+    let count = 0;
+    const MAX_ARTICLES = 2;
 
     snapshot.forEach(docSnap => {
-      if (count >= MAX_ARTICLES) return; 
+      if (count >= MAX_ARTICLES) return;
 
       const data = docSnap.data();
-      let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+      const badgeClass =
+        data.category.toLowerCase() === "ssc"
+          ? "ssc-badge"
+          : "hsc-badge";
 
       const a = document.createElement("a");
       a.href = `article/readarticle.html?slug=${data.slug}`;
@@ -48,9 +76,7 @@ async function loadArticles() {
               <span class="date">${formatDate(data.createdAt)}</span>
             </div>
             <h3>${data.title}</h3>
-            <p>
-              ${data.content.replace(/<[^>]+>/g,'').substring(0,120)}...
-            </p>
+            <p>${data.content.replace(/<[^>]+>/g,'').substring(0,120)}...</p>
             <div class="card-footer">
               <span class="read-more-btn">Read More →</span>
             </div>
@@ -59,47 +85,98 @@ async function loadArticles() {
       `;
 
       articleGrid.appendChild(a);
-      count++; 
+      count++;
     });
 
-  } catch(err) {
+  } catch (err) {
     articleGrid.innerHTML = `<p>Error loading articles: ${err.message}</p>`;
   }
 }
 
-// --- ৩. মোবাইল মেনু ফাংশনালিটি (নতুন যোগ করা হয়েছে) ---
-function initMobileMenu() {
-    const menu = document.querySelector('#mobile-menu');
-    const menuLinks = document.querySelector('.nav-links');
 
-    if (menu && menuLinks) {
-        menu.addEventListener('click', function() {
-            menu.classList.toggle('is-active');
-            menuLinks.classList.toggle('active');
-        });
+/* ===========================
+   🔔 FCM SETUP
+=========================== */
+const messaging = getMessaging(window.app);
 
-        // মেনু লিঙ্কে ক্লিক করলে মেনু ক্লোজ হবে
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                menu.classList.remove('is-active');
-                menuLinks.classList.remove('active');
-            });
-        });
+// 🔔 Notification permission + token
+async function enableNotifications() {
+  try {
+    const permission = await Notification.requestPermission();
+
+    if (permission !== "granted") {
+      alert("Notification permission denied ❌");
+      return;
     }
-}
 
-// --- ৪. ইভেন্ট লিসেনারস ---
-
-// ব্রাউজ বাটন ক্লিক
-const scrollBtn = document.getElementById('scroll-to-search');
-if(scrollBtn) {
-    scrollBtn.addEventListener('click', function() {
-        window.open('question.html', '_self');
+    const token = await getToken(messaging, {
+      vapidKey: "YOUR_VAPID_KEY_HERE" // 🔴 Firebase Console → Cloud Messaging
     });
+
+    if (token) {
+      await addDoc(collection(window.db, "fcmTokens"), {
+        token,
+        createdAt: serverTimestamp()
+      });
+
+      alert("🔔 Notifications enabled successfully!");
+    }
+
+  } catch (err) {
+    console.error("FCM error:", err);
+  }
 }
 
-// পেজ লোড হলে সব শুরু হবে
+
+// 🔔 Foreground notification
+onMessage(messaging, (payload) => {
+  const { title, body, image } = payload.notification;
+
+  new Notification(title, {
+    body,
+    icon: image || "/favicon.ico"
+  });
+});
+
+
+/* ===========================
+   📱 MOBILE MENU
+=========================== */
+function initMobileMenu() {
+  const menu = document.querySelector("#mobile-menu");
+  const menuLinks = document.querySelector(".nav-links");
+
+  if (menu && menuLinks) {
+    menu.addEventListener("click", () => {
+      menu.classList.toggle("is-active");
+      menuLinks.classList.toggle("active");
+    });
+
+    document.querySelectorAll(".nav-links a").forEach(link => {
+      link.addEventListener("click", () => {
+        menu.classList.remove("is-active");
+        menuLinks.classList.remove("active");
+      });
+    });
+  }
+}
+
+
+/* ===========================
+   🚀 EVENTS
+=========================== */
+const scrollBtn = document.getElementById("scroll-to-search");
+if (scrollBtn) {
+  scrollBtn.addEventListener("click", () => {
+    window.location.href = "question.html";
+  });
+}
+
+if (enableNotificationBtn) {
+  enableNotificationBtn.addEventListener("click", enableNotifications);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
-    loadArticles();
-    initMobileMenu();
+  loadArticles();
+  initMobileMenu();
 });
