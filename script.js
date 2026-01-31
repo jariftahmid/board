@@ -110,7 +110,7 @@ async function enableNotifications() {
     }
 
     const token = await getToken(messaging, {
-      vapidKey: "YOUR_VAPID_KEY_HERE" // 🔴 Firebase Console → Cloud Messaging
+      vapidKey: "BEX_bbKtIXnvoR80dpVXP7p2Lfskr4pJuG0WZx6vRwOGgJX0wORB2y5AoUFqiiUsnpAcNGN7nLC1IVSZek7qEk4" // 🔴 Firebase Console → Cloud Messaging
     });
 
     if (token) {
