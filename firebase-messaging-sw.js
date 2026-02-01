@@ -12,18 +12,28 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// 🔔 Background Notification Handler
-messaging.onBackgroundMessage(function(payload) {
-  console.log("[firebase-messaging-sw.js] Background message:", payload);
+messaging.onBackgroundMessage((payload) => {
+  console.log("🔔 BG Notification:", payload);
 
   const notificationTitle = payload.notification.title;
+
   const notificationOptions = {
     body: payload.notification.body,
-    icon: payload.notification.image || "/icon.png"
+    icon: payload.notification.image,   // small icon
+    image: payload.notification.image,  // BIG image (URL)
+    data: {
+      url: payload.notification.click_action
+    }
   };
 
-  self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
-  );
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// click করলে article খুলবে
+self.addEventListener("notificationclick", function(event) {
+  event.notification.close();
+  const url = event.notification.data.url;
+  if (url) {
+    event.waitUntil(clients.openWindow(url));
+  }
 });

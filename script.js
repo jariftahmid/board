@@ -16,6 +16,7 @@ import {
 =========================== */
 const articleGrid = document.getElementById("articleGrid");
 const enableNotificationBtn = document.getElementById("enableNotificationBtn");
+const scrollBtn = document.getElementById("scroll-to-search");
 
 
 /* ===========================
@@ -33,10 +34,11 @@ const formatDate = (timestamp) => {
 
 
 /* ===========================
-   🔥 LOAD ARTICLES
+   🔥 LOAD ARTICLES (MAX 2)
 =========================== */
 async function loadArticles() {
   if (!articleGrid) return;
+
   articleGrid.innerHTML = "Loading...";
 
   try {
@@ -56,7 +58,7 @@ async function loadArticles() {
 
       const data = docSnap.data();
       const badgeClass =
-        data.category.toLowerCase() === "ssc"
+        data.category?.toLowerCase() === "ssc"
           ? "ssc-badge"
           : "hsc-badge";
 
@@ -67,7 +69,7 @@ async function loadArticles() {
           <div class="card-img">
             <img src="${data.image}" alt="${data.title}">
             <span class="badge ${badgeClass}">
-              ${data.category.toUpperCase()}
+              ${data.category?.toUpperCase()}
             </span>
           </div>
           <div class="card-body">
@@ -76,7 +78,7 @@ async function loadArticles() {
               <span class="date">${formatDate(data.createdAt)}</span>
             </div>
             <h3>${data.title}</h3>
-            <p>${data.content.replace(/<[^>]+>/g,'').substring(0,120)}...</p>
+            <p>${data.content.replace(/<[^>]+>/g, "").substring(0, 120)}...</p>
             <div class="card-footer">
               <span class="read-more-btn">Read More →</span>
             </div>
@@ -97,9 +99,17 @@ async function loadArticles() {
 /* ===========================
    🔔 FCM SETUP
 =========================== */
-const messaging = getMessaging(window.app);
 
-// 🔔 Notification permission + token
+// 🔴 VERY IMPORTANT: service worker register
+const registration = await navigator.serviceWorker.register(
+  "/firebase-messaging-sw.js"
+);
+
+// 🔴 messaging must use db app
+const messaging = getMessaging(window.firebaseApp);
+
+
+// Enable notification + save token
 async function enableNotifications() {
   try {
     const permission = await Notification.requestPermission();
@@ -110,7 +120,8 @@ async function enableNotifications() {
     }
 
     const token = await getToken(messaging, {
-      vapidKey: "BEX_bbKtIXnvoR80dpVXP7p2Lfskr4pJuG0WZx6vRwOGgJX0wORB2y5AoUFqiiUsnpAcNGN7nLC1IVSZek7qEk4" // 🔴 Firebase Console → Cloud Messaging
+      vapidKey: "BEX_bbKtIXnvoR80dpVXP7p2Lfskr4pJuG0WZx6vRwOGgJX0wORB2y5AoUFqiiUsnpAcNGN7nLC1IVSZek7qEk4",
+      serviceWorkerRegistration: registration
     });
 
     if (token) {
@@ -119,22 +130,27 @@ async function enableNotifications() {
         createdAt: serverTimestamp()
       });
 
-      alert("🔔 Notifications enabled successfully!");
+      new Notification("BoardQues 🔔", {
+        body: "Notifications enabled successfully!",
+        icon: "/favicon.ico"
+      });
     }
 
   } catch (err) {
-    console.error("FCM error:", err);
+    console.error("FCM Error:", err);
   }
 }
 
 
-// 🔔 Foreground notification
+// 🔔 FOREGROUND notification (site open থাকলে)
 onMessage(messaging, (payload) => {
-  const { title, body, image } = payload.notification;
+  const { title, body, image, click_action } = payload.notification;
 
   new Notification(title, {
-    body,
-    icon: image || "/favicon.ico"
+    body: body,
+    icon: image || "/favicon.ico",
+    image: image,
+    data: { url: click_action }
   });
 });
 
@@ -146,26 +162,26 @@ function initMobileMenu() {
   const menu = document.querySelector("#mobile-menu");
   const menuLinks = document.querySelector(".nav-links");
 
-  if (menu && menuLinks) {
-    menu.addEventListener("click", () => {
-      menu.classList.toggle("is-active");
-      menuLinks.classList.toggle("active");
-    });
+  if (!menu || !menuLinks) return;
 
-    document.querySelectorAll(".nav-links a").forEach(link => {
-      link.addEventListener("click", () => {
-        menu.classList.remove("is-active");
-        menuLinks.classList.remove("active");
-      });
+  menu.addEventListener("click", () => {
+    menu.classList.toggle("is-active");
+    menuLinks.classList.toggle("active");
+  });
+
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("is-active");
+      menuLinks.classList.remove("active");
     });
-  }
+  });
 }
 
 
 /* ===========================
    🚀 EVENTS
 =========================== */
-const scrollBtn = document.getElementById("scroll-to-search");
+
 if (scrollBtn) {
   scrollBtn.addEventListener("click", () => {
     window.location.href = "question.html";
