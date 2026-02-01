@@ -10,7 +10,6 @@ import {
   onMessage 
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js";
 
-
 /* ===========================
     🔥 DOM ELEMENTS
 =========================== */
@@ -18,7 +17,7 @@ const articleGrid = document.getElementById("articleGrid");
 const enableNotificationBtn = document.getElementById("enableNotificationBtn");
 const scrollBtn = document.getElementById("scroll-to-search");
 
-// Global variables for FCM
+// Global variables
 let messaging;
 let swRegistration;
 
@@ -35,16 +34,21 @@ const formatDate = (timestamp) => {
   });
 };
 
-
 /* ===========================
     🔥 LOAD ARTICLES (MAX 2)
 =========================== */
 async function loadArticles() {
   if (!articleGrid) return;
+
+  // window.db লোড হওয়া পর্যন্ত অপেক্ষা করার লজিক
+  if (!window.db) {
+    setTimeout(loadArticles, 500);
+    return;
+  }
+
   articleGrid.innerHTML = "Loading...";
 
   try {
-    // window.db initialize hote somoy dite hobe
     const snapshot = await getDocs(collection(window.db, "articles"));
     articleGrid.innerHTML = "";
 
@@ -58,7 +62,6 @@ async function loadArticles() {
 
     snapshot.forEach(docSnap => {
       if (count >= MAX_ARTICLES) return;
-
       const data = docSnap.data();
       const badgeClass = data.category?.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
 
@@ -90,40 +93,49 @@ async function loadArticles() {
   }
 }
 
-
 /* ===========================
-    🔔 FCM SETUP (Fixed)
+    🔔 FCM SETUP (Fixed Timing)
 =========================== */
-
 async function initFCM() {
+  // ১. Firebase App লোড হওয়া পর্যন্ত অপেক্ষা করুন
+  if (!window.firebaseApp) {
+    console.log("Waiting for Firebase App...");
+    setTimeout(initFCM, 500); 
+    return;
+  }
+
   try {
-    // 1. Service Worker Register
+    // ২. Service Worker Register
     swRegistration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
     console.log("Service Worker registered! ✅");
 
-    // 2. Messaging Initialize (window.firebaseApp load hobar por)
-    if (window.firebaseApp) {
-        messaging = getMessaging(window.firebaseApp);
-        
-        // 3. Listen for Foreground Messages
-        onMessage(messaging, (payload) => {
-          console.log("Foreground Message:", payload);
-          const { title, body, image } = payload.notification;
-          new Notification(title, {
-            body: body,
-            icon: image || "/favicon.ico"
-          });
-        });
-    }
+    // ৩. Messaging Initialize
+    messaging = getMessaging(window.firebaseApp);
+    
+    // ৪. Foreground Notifications
+    onMessage(messaging, (payload) => {
+      console.log("Foreground Message:", payload);
+      const { title, body, image } = payload.notification;
+      new Notification(title, {
+        body: body,
+        icon: image || "/favicon.ico"
+      });
+    });
   } catch (error) {
     console.error("FCM Initialization Failed:", error);
   }
 }
 
 async function enableNotifications() {
+  // যদি এখনো লোড না হয়, তবে ইউজারকে এরর না দেখিয়ে পুনরায় চেষ্টা করুন
   if (!messaging || !swRegistration) {
-      alert("Firebase is still loading... Please wait.");
-      return;
+    if (window.firebaseApp) {
+        messaging = getMessaging(window.firebaseApp);
+        swRegistration = await navigator.serviceWorker.getRegistration();
+    } else {
+        alert("Firebase is still loading... Please wait a moment.");
+        return;
+    }
   }
 
   try {
@@ -147,9 +159,9 @@ async function enableNotifications() {
     }
   } catch (err) {
     console.error("Enable Notification Error:", err);
+    alert("Could not enable notifications. Please try again.");
   }
 }
-
 
 /* ===========================
     📱 MOBILE MENU
@@ -168,11 +180,10 @@ function initMobileMenu() {
 /* ===========================
     🚀 INITIALIZE EVERYTHING
 =========================== */
-
 window.addEventListener("DOMContentLoaded", () => {
   initMobileMenu();
   loadArticles();
-  initFCM(); // FCM start kora holo
+  initFCM(); 
   
   if (scrollBtn) {
     scrollBtn.onclick = () => window.location.href = "question.html";
