@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher's Corner | Board Question Bank</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+    <div class="logo">BoardQues</div>
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <ul class="nav-links">
+        <li class="center"><a href="index.html">Home</a></li>
+        <li class="center"><a href="question.html">Questions</a></li>
+        <li class="center"><a href="article/article.html">Articles</a></li>
+        <li class="center"><a href="teacher.html"  id="home-nav">Teacher's Corner</a></li>
+        <li class="center"><a href="about-us.html">About Us</a></li>
+    </ul>
+</nav>
+    <div class="sidebar">
+        <h2>Subjects</h2>
+        <button onclick="showContent('bangla', this)" class="active">Bangla</button>
+        <button onclick="showContent('english', this)">English</button>
+        <button onclick="showContent('math', this)">Math</button>
+    </div>
+
+    <div class="main-content">
+        <h1 id="subject-title" class="header-title">Bangla Classes</h1>
+        <div id="video-container" class="video-grid">
+            </div>
+    </div>
+
+    <script>
+        // Data Structure for Subjects and Videos
+        const subjects = {
+            bangla: {
+                title: "Bangla Classes",
+                videos: [
+                    { title: "Bangla 1st Paper - Porichiti", id: "dQw4w9WgXcQ" }, // Replace with real Video IDs
+                    { title: "Bangla Grammar - Shondhi", id: "30vHn7E7uS0" }
+                ]
+            },
+            english: {
+                title: "English Classes",
+                videos: [
+                    { title: "Tense Mastery", id: "847V_pS8iio" },
+                    { title: "Sentence Structure", id: "uY_R96_T_6k" }
+                ]
+            },
+            math: {
+                title: "Math Classes",
+                videos: [
+                    { title: "Algebra Basics", id: "NybHck1Va0U" },
+                    { title: "Geometry - Circle", id: "O_6IunG_P_k" }
+                ]
+            }
+        };
+
+        function showContent(subjectKey, btn) {
+            // Update Active Button
+            const buttons = document.querySelectorAll('.sidebar button');
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update Content
+            const subject = subjects[subjectKey];
+            document.getElementById('subject-title').innerText = subject.title;
+            
+            const container = document.getElementById('video-container');
+            container.innerHTML = ""; // Clear old videos
+
+            subject.videos.forEach(video => {
+                const card = `
+                    <div class="video-card">
+                        <iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe>
+                        <h3>${video.title}</h3>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Load Bangla by default
+        window.onload = () => {
+            showContent('bangla', document.querySelector('.sidebar button'));
+        };
+    </script>
+
+</body>
+</html>
