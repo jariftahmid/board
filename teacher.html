@@ -29,8 +29,14 @@
     <div class="sidebar">
         <h2>Subjects</h2>
         <button onclick="showContent('bangla', this)" class="active">Bangla</button>
-        <button onclick="showContent('english', this)">English</button>
+        <button onclick="showContent('english1', this)">English 1st paper</button>
         <button onclick="showContent('math', this)">Math</button>
+        <button onclick="showContent('physics', this)">Physics</button>
+        <button onclick="showContent('chemistry', this)">Chemistry</button>
+        <button onclick="showContent('biology', this)">Biology</button>
+        <button onclick="showContent('ict', this)">ICT</button>
+        <button onclick="showContent('bgs', this)">Bangladesh and global studies</button>
+        <button onclick="showContent('english2', this)">English 2nd paper</button>
     </div>
 
     <div class="main-content">
@@ -45,22 +51,29 @@
             bangla: {
                 title: "Bangla Classes",
                 videos: [
-                    { title: "Bangla 1st Paper - Porichiti", id: "dQw4w9WgXcQ" }, // Replace with real Video IDs
-                    { title: "Bangla Grammar - Shondhi", id: "30vHn7E7uS0" }
+                    { title: "Bangla 1st Paper - Porichiti", id: "https://www.youtube.com/embed/dQw4w9WgXcQ" }, // Replace with real Video IDs
+                    { title: "Bangla Grammar - Shondhi", id: "https://www.youtube.com/embed/30vHn7E7uS0" }
                 ]
             },
-            english: {
-                title: "English Classes",
+            english1: {
+                title: "English 1st paper Classes",
                 videos: [
-                    { title: "Tense Mastery", id: "847V_pS8iio" },
-                    { title: "Sentence Structure", id: "uY_R96_T_6k" }
+                    { title: "Tense Mastery", id: "https://www.youtube.com/embed/847V_pS8iio" },
+                    { title: "Sentence Structure", id: "https://www.youtube.com/embed/uY_R96_T_6k" }
                 ]
             },
             math: {
                 title: "Math Classes",
                 videos: [
-                    { title: "Algebra Basics", id: "NybHck1Va0U" },
-                    { title: "Geometry - Circle", id: "O_6IunG_P_k" }
+                    { title: "Algebra Basics", id: "https://www.youtube.com/embed/NybHck1Va0U" },
+                    { title: "Geometry - Circle", id: "https://www.youtube.com/embed/O_6IunG_P_k" }
+                ]
+            },
+            physics: {
+                title: "Physics",
+                videos: [
+                    { title: "Vouto porimap", id: "https://www.youtube.com/embed/847V_pS8iio" },
+                    { title: "Alor protisoron", id: "https://www.youtube.com/embed/847V_pS8iio" },
                 ]
             }
         };
@@ -81,7 +94,7 @@
             subject.videos.forEach(video => {
                 const card = `
                     <div class="video-card">
-                        <iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe>
+                        <iframe src="${video.id}" allowfullscreen></iframe>
                         <h3>${video.title}</h3>
                     </div>
                 `;
