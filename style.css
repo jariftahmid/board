@@ -355,3 +355,7 @@ a {
     #mobile-menu.is-active .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
     #mobile-menu.is-active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 }
+.logo img{
+    height: 32px;
+    width: 32px;
+}
