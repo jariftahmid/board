@@ -358,4 +358,5 @@ a {
 .logo img{
     height: 32px;
     width: 32px;
+    transform: translateY(5px);
 }
