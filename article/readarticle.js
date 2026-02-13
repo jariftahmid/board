@@ -1,9 +1,9 @@
-import { collection, getDocs, query, where } 
+import { collection, getDocs, query, where, doc, updateDoc } 
 from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const articleContent = document.getElementById("articleContent");
 
-// URL থেকে স্লাগ (slug) নেওয়া
+// URL থেকে slug নেওয়া
 const params = new URLSearchParams(window.location.search);
 const slug = params.get("slug");
 
@@ -14,27 +14,72 @@ const formatDate = (timestamp) => {
   return date.toLocaleDateString("en-US", { day:'2-digit', month:'short', year:'numeric' });
 };
 
-// মোবাইল মেনু ফাংশনালিটি
+// মোবাইল মেনু
 function initMobileMenu() {
     const menu = document.querySelector('#mobile-menu');
     const menuLinks = document.querySelector('.nav-links');
-
-    // চেক করা হচ্ছে এলিমেন্টগুলো পেজে আছে কি না
-    if (menu && menuLinks) {
-        menu.addEventListener('click', function() {
+    if(menu && menuLinks){
+        menu.addEventListener('click', ()=> {
             menu.classList.toggle('is-active');
             menuLinks.classList.toggle('active');
         });
-
-        document.querySelectorAll('.nav-links a').forEach(n => n.addEventListener('click', () => {
+        document.querySelectorAll('.nav-links a').forEach(n => n.addEventListener('click', ()=>{
             menu.classList.remove('is-active');
             menuLinks.classList.remove('active');
         }));
     }
 }
 
-// আর্টিকেল লোড করার ফাংশন
+// Load article + increment views
 async function loadArticle() {
+  if (!slug) { articleContent.innerHTML = "<p>No article specified</p>"; return; }
+
+  try {
+    const q = query(collection(window.db, "articles"), where("slug", "==", slug));
+    const snap = await getDocs(q);
+
+    if(snap.empty){ articleContent.innerHTML = "<p>Article not found</p>"; return; }
+
+    snap.forEach(async docSnap => {
+      const data = docSnap.data();
+      const docRef = doc(window.db, "articles", docSnap.id);
+
+      // 🔹 Increment views
+      const newViews = (data.views || 0) + 1;
+      await updateDoc(docRef, { views: newViews });
+
+      // Page title
+      document.title = data.title + " | BoardQues";
+
+      let badgeClass = data.category?.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+
+      if(articleContent){
+          articleContent.innerHTML = `
+            <h1>${data.title}</h1>
+            <p class="meta">
+              <span class="badge ${badgeClass}">${data.category?.toUpperCase() || ""}</span>
+              <span class="subject">${data.subject || ""}</span>
+              <span class="date">${formatDate(data.createdAt)}</span>
+            </p>
+            <img src="${data.image || ""}" alt="${data.title}" style="max-width:100%; border-radius:20px; margin: 20px 0;">
+            <div id="article-body">${data.content}</div>
+          `;
+      }
+
+      if(window.MathJax){
+        MathJax.typesetPromise([document.getElementById("article-body")]);
+      }
+    });
+  } catch(err){
+    articleContent.innerHTML = `<p>Error loading article: ${err.message}</p>`;
+    console.error(err);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", ()=>{
+    loadArticle();
+    initMobileMenu();
+});async function loadArticle() {
   if (!slug) {
     if(articleContent) articleContent.innerHTML = "<p>No article specified</p>";
     return;
