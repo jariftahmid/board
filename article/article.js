@@ -1,4 +1,5 @@
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { collection, getDocs, doc, updateDoc, increment } 
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const articleGrid = document.getElementById("articleGrid");
 
@@ -20,7 +21,6 @@ function initMobileMenu() {
             menuLinks.classList.toggle('active');
         });
 
-        // মেনুর কোনো লিংকে ক্লিক করলে মেনু বন্ধ হয়ে যাবে
         document.querySelectorAll('.nav-links a').forEach(n => {
             n.addEventListener('click', () => {
                 menu.classList.remove('is-active');
@@ -30,11 +30,82 @@ function initMobileMenu() {
     }
 }
 
+// 🔥 View count increment function
+async function increaseView(docId) {
+    try {
+        await updateDoc(doc(window.db, "articles", docId), {
+            views: increment(1)
+        });
+    } catch (err) {
+        console.error("View update failed:", err);
+    }
+}
+
 // ৩. আর্টিকেল লোড করার ফাংশন
 async function loadArticles() {
-    if (!articleGrid) return; // গ্রিড না থাকলে ফাংশন থামিয়ে দেবে
+    if (!articleGrid) return;
     
     articleGrid.innerHTML = "<p>Loading articles...</p>";
+
+    try {
+        const snapshot = await getDocs(collection(window.db, "articles"));
+        articleGrid.innerHTML = "";
+
+        if (snapshot.empty) {
+            articleGrid.innerHTML = "<p>No articles found.</p>";
+            return;
+        }
+
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const docId = docSnap.id;
+
+            let badgeClass = data.category?.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+
+            const a = document.createElement("a");
+            a.href = `readarticle.html?slug=${data.slug}`; 
+            
+            a.innerHTML = `
+                <article class="card">
+                    <div class="card-img">
+                        <img src="${data.image}" alt="${data.title}">
+                        <span class="badge ${badgeClass}">${data.category?.toUpperCase()}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="meta-info">
+                            <span class="category">${data.subject}</span>
+                            <span class="date">${formatDate(data.createdAt)}</span>
+                        </div>
+                        <h3>${data.title}</h3>
+                        <p>${data.content.replace(/<[^>]+>/g, '').substring(0, 120)}...</p>
+                        <div class="card-footer">
+                            <span class="read-more-btn">Read More →</span>
+                        </div>
+                    </div>
+                </article>
+            `;
+
+            // 🔥 Click করলে view +1 হবে তারপর redirect
+            a.addEventListener("click", async (e) => {
+                e.preventDefault();
+                await increaseView(docId);
+                window.location.href = a.href;
+            });
+
+            articleGrid.appendChild(a);
+        });
+
+    } catch (err) {
+        articleGrid.innerHTML = `<p>Error loading articles: ${err.message}</p>`;
+        console.error("Firestore Error:", err);
+    }
+}
+
+// পেজ লোড হলে ফাংশনগুলো কল করা
+window.addEventListener("DOMContentLoaded", () => {
+    initMobileMenu();
+    loadArticles();
+});    articleGrid.innerHTML = "<p>Loading articles...</p>";
 
     try {
         const snapshot = await getDocs(collection(window.db, "articles"));
