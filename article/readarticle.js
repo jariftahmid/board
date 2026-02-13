@@ -40,6 +40,57 @@ async function loadArticle() {
 
     if(snap.empty){ articleContent.innerHTML = "<p>Article not found</p>"; return; }
 
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      const docRef = doc(window.db, "articles", docSnap.id);
+
+      // 🔹 Render content first
+      document.title = data.title + " | BoardQues";
+      let badgeClass = data.category?.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+
+      if(articleContent){
+          articleContent.innerHTML = `
+            <h1>${data.title}</h1>
+            <p class="meta">
+              <span class="badge ${badgeClass}">${data.category?.toUpperCase() || ""}</span>
+              <span class="subject">${data.subject || ""}</span>
+              <span class="date">${formatDate(data.createdAt)}</span>
+            </p>
+            <img src="${data.image || ""}" alt="${data.title}" style="max-width:100%; border-radius:20px; margin: 20px 0;">
+            <div id="article-body">${data.content}</div>
+          `;
+      }
+
+      if(window.MathJax){
+        MathJax.typesetPromise([document.getElementById("article-body")]);
+      }
+
+      // 🔹 Increment views in background (async)
+      (async () => {
+        try {
+          const newViews = (data.views || 0) + 1;
+          await updateDoc(docRef, { views: newViews });
+        } catch(err) {
+          console.error("Failed to increment views:", err);
+        }
+      })();
+    });
+
+  } catch(err){
+    articleContent.innerHTML = `<p>Error loading article: ${err.message}</p>`;
+    console.error(err);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", ()=>{
+    loadArticle();
+    initMobileMenu();
+});  try {
+    const q = query(collection(window.db, "articles"), where("slug", "==", slug));
+    const snap = await getDocs(q);
+
+    if(snap.empty){ articleContent.innerHTML = "<p>Article not found</p>"; return; }
+
     snap.forEach(async docSnap => {
       const data = docSnap.data();
       const docRef = doc(window.db, "articles", docSnap.id);
