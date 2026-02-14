@@ -1,40 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Full Article</title>
-<link rel="stylesheet" href="article.css">
-<link rel="stylesheet" href="readarticle.css">
-<link rel="stylesheet" href="../style.css">
-<link rel="shortcut icon" href="../favicon.png" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Read Article</title>
 
+  <link rel="stylesheet" href="../style.css" />
 </head>
+
 <body>
 
-<nav class="navbar">
-    <div class="logo">BoardQues</div>
-    
-    <div class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+  <!-- ================= HEADER ================= -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="../index.html">Board</a>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../article.html">Articles</a></li>
+        <li><a href="../question.html">Questions</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <!-- ================= MAIN ARTICLE ================= -->
+  <main class="container">
+
+    <div id="articleContainer" class="single-article">
+      <p>Loading article...</p>
     </div>
 
-    <ul class="nav-links">
-        <li class="center"><a href="../index.html">Home</a></li>
-        <li class="center"><a href="../question.html">Questions</a></li>
-        <li class="center"><a href="article.html"  id="home-nav">Articles</a></li>
-        <li class="center"><a href="../teacher.html">Teacher's Corner</a></li>
-        <li class="center"><a href="../about-us.html">About Us</a></li>
-    </ul>
-</nav>
+    <!-- ================= RELATED ARTICLES ================= -->
+    <section class="related-section">
+      <h2>Latest Articles</h2>
+      <div id="relatedArticles" class="article-grid"></div>
+    </section>
 
-<div id="articleContent">Loading...</div>
-  <footer class="footer">
-        <p>&copy; 2025 BoardQues. All rights reserved.</p>
-    </footer>
+  </main>
 
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <p>© 2026 Board. All rights reserved.</p>
+  </footer>
+
+
+  <!-- ================= FIREBASE INIT ================= -->
+  <script type="module" src="firebase.js"></script>
+
+
+  <!-- ================= READ ARTICLE SCRIPT ================= -->
+  <script type="module" src="readarticle.js"></script>
+
+</body>
+</html>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="readarticle.js"></script>
 
