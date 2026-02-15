@@ -1,187 +1,161 @@
-import { collection, getDocs, query, where, doc, updateDoc } 
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+  increment
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-const articleContent = document.getElementById("articleContent");
+const articleContent = document.getElementById("articleContent") || document.getElementById("articleContainer");
+const relatedArticles = document.getElementById("relatedArticles");
 
-// URL থেকে slug নেওয়া
 const params = new URLSearchParams(window.location.search);
 const slug = params.get("slug");
 
-// ডেট ফরম্যাট করার ফাংশন
 const formatDate = (timestamp) => {
-  if (!timestamp) return "";
+  if (!timestamp?.seconds) return "";
+
   const date = new Date(timestamp.seconds * 1000);
-  return date.toLocaleDateString("en-US", { day:'2-digit', month:'short', year:'numeric' });
+  return date.toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
 };
 
-// মোবাইল মেনু
+const stripHtml = (text = "") => text.replace(/<[^>]*>/g, "").trim();
+
 function initMobileMenu() {
-    const menu = document.querySelector('#mobile-menu');
-    const menuLinks = document.querySelector('.nav-links');
-    if(menu && menuLinks){
-        menu.addEventListener('click', ()=> {
-            menu.classList.toggle('is-active');
-            menuLinks.classList.toggle('active');
-        });
-        document.querySelectorAll('.nav-links a').forEach(n => n.addEventListener('click', ()=>{
-            menu.classList.remove('is-active');
-            menuLinks.classList.remove('active');
-        }));
-    }
+  const menu = document.querySelector("#mobile-menu");
+  const menuLinks = document.querySelector(".nav-links");
+
+  if (!menu || !menuLinks) return;
+
+  menu.addEventListener("click", () => {
+    menu.classList.toggle("is-active");
+    menuLinks.classList.toggle("active");
+  });
+
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("is-active");
+      menuLinks.classList.remove("active");
+    });
+  });
 }
 
-// Load article + increment views
+function renderArticle(data) {
+  if (!articleContent) return;
+
+  const badgeClass = data.category?.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+
+  articleContent.innerHTML = `
+    <h1>${data.title || "Untitled"}</h1>
+    <p class="meta">
+      <span class="badge ${badgeClass}">${data.category?.toUpperCase() || ""}</span>
+      <span class="subject">${data.subject || ""}</span>
+      <span class="date">${formatDate(data.createdAt)}</span>
+    </p>
+    <img src="${data.image || ""}" alt="${data.title || "Article image"}" style="max-width:100%; border-radius:20px; margin:20px 0;">
+    <div id="article-body">${data.content || ""}</div>
+  `;
+
+  if (window.MathJax) {
+    window.MathJax.typesetPromise([document.getElementById("article-body")]);
+  }
+}
+
+function renderRelatedArticles(allArticles, currentArticleId, category) {
+  if (!relatedArticles) return;
+
+  const categoryValue = (category || "").toLowerCase();
+
+  const sameCategory = allArticles
+    .filter((item) => item.id !== currentArticleId)
+    .filter((item) => (item.data.category || "").toLowerCase() === categoryValue)
+    .sort((a, b) => (b.data.createdAt?.seconds || 0) - (a.data.createdAt?.seconds || 0))
+    .slice(0, 4);
+
+  if (!sameCategory.length) {
+    relatedArticles.innerHTML = "<p>No same category article found.</p>";
+    return;
+  }
+
+  relatedArticles.innerHTML = "";
+
+  sameCategory.forEach(({ data }) => {
+    const badgeClass = data.category?.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+
+    const card = document.createElement("a");
+    card.href = `readarticle.html?slug=${data.slug}`;
+    card.innerHTML = `
+      <article class="card">
+        <div class="card-img">
+          <img src="${data.image || ""}" alt="${data.title || "Article image"}">
+          <span class="badge ${badgeClass}">${data.category?.toUpperCase() || ""}</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-info">
+            <span class="category">${data.subject || ""}</span>
+            <span class="date">${formatDate(data.createdAt)}</span>
+          </div>
+          <h3>${data.title || "Untitled"}</h3>
+          <p>${stripHtml(data.content).substring(0, 120)}...</p>
+        </div>
+      </article>
+    `;
+
+    relatedArticles.appendChild(card);
+  });
+}
+
 async function loadArticle() {
-  if (!slug) { articleContent.innerHTML = "<p>No article specified</p>"; return; }
-
-  try {
-    const q = query(collection(window.db, "articles"), where("slug", "==", slug));
-    const snap = await getDocs(q);
-
-    if(snap.empty){ articleContent.innerHTML = "<p>Article not found</p>"; return; }
-
-    snap.forEach(docSnap => {
-      const data = docSnap.data();
-      const docRef = doc(window.db, "articles", docSnap.id);
-
-      // 🔹 Render content first
-      document.title = data.title + " | BoardQues";
-      let badgeClass = data.category?.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
-
-      if(articleContent){
-          articleContent.innerHTML = `
-            <h1>${data.title}</h1>
-            <p class="meta">
-              <span class="badge ${badgeClass}">${data.category?.toUpperCase() || ""}</span>
-              <span class="subject">${data.subject || ""}</span>
-              <span class="date">${formatDate(data.createdAt)}</span>
-            </p>
-            <img src="${data.image || ""}" alt="${data.title}" style="max-width:100%; border-radius:20px; margin: 20px 0;">
-            <div id="article-body">${data.content}</div>
-          `;
-      }
-
-      if(window.MathJax){
-        MathJax.typesetPromise([document.getElementById("article-body")]);
-      }
-
-      // 🔹 Increment views in background (async)
-      (async () => {
-        try {
-          const newViews = (data.views || 0) + 1;
-          await updateDoc(docRef, { views: newViews });
-        } catch(err) {
-          console.error("Failed to increment views:", err);
-        }
-      })();
-    });
-
-  } catch(err){
-    articleContent.innerHTML = `<p>Error loading article: ${err.message}</p>`;
-    console.error(err);
-  }
-}
-
-window.addEventListener("DOMContentLoaded", ()=>{
-    loadArticle();
-    initMobileMenu();
-});  try {
-    const q = query(collection(window.db, "articles"), where("slug", "==", slug));
-    const snap = await getDocs(q);
-
-    if(snap.empty){ articleContent.innerHTML = "<p>Article not found</p>"; return; }
-
-    snap.forEach(async docSnap => {
-      const data = docSnap.data();
-      const docRef = doc(window.db, "articles", docSnap.id);
-
-      // 🔹 Increment views
-      const newViews = (data.views || 0) + 1;
-      await updateDoc(docRef, { views: newViews });
-
-      // Page title
-      document.title = data.title + " | BoardQues";
-
-      let badgeClass = data.category?.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
-
-      if(articleContent){
-          articleContent.innerHTML = `
-            <h1>${data.title}</h1>
-            <p class="meta">
-              <span class="badge ${badgeClass}">${data.category?.toUpperCase() || ""}</span>
-              <span class="subject">${data.subject || ""}</span>
-              <span class="date">${formatDate(data.createdAt)}</span>
-            </p>
-            <img src="${data.image || ""}" alt="${data.title}" style="max-width:100%; border-radius:20px; margin: 20px 0;">
-            <div id="article-body">${data.content}</div>
-          `;
-      }
-
-      if(window.MathJax){
-        MathJax.typesetPromise([document.getElementById("article-body")]);
-      }
-    });
-  } catch(err){
-    articleContent.innerHTML = `<p>Error loading article: ${err.message}</p>`;
-    console.error(err);
-  }
-}
-
-window.addEventListener("DOMContentLoaded", ()=>{
-    loadArticle();
-    initMobileMenu();
-});async function loadArticle() {
   if (!slug) {
-    if(articleContent) articleContent.innerHTML = "<p>No article specified</p>";
+    if (articleContent) articleContent.innerHTML = "<p>No article specified</p>";
     return;
   }
 
   try {
-    const q = query(collection(window.db, "articles"), where("slug", "==", slug));
-    const snap = await getDocs(q);
+    const articleQuery = query(collection(window.db, "articles"), where("slug", "==", slug));
+    const articleSnap = await getDocs(articleQuery);
 
-    if (snap.empty) {
-      if(articleContent) articleContent.innerHTML = "<p>Article not found</p>";
+    if (articleSnap.empty) {
+      if (articleContent) articleContent.innerHTML = "<p>Article not found</p>";
       return;
     }
 
-    snap.forEach(docSnap => {
-      const data = docSnap.data();
+    const currentDoc = articleSnap.docs[0];
+    const currentData = currentDoc.data();
 
-      // ডাইনামিক পেজ টাইটেল
-      document.title = data.title + " | BoardQues";
+    document.title = `${currentData.title || "Article"} | BoardQues`;
+    renderArticle(currentData);
 
-      // ব্যাজ ক্লাস নির্ধারণ
-      let badgeClass = data.category.toLowerCase() === "ssc" ? "ssc-badge" : "hsc-badge";
+    try {
+      await updateDoc(doc(window.db, "articles", currentDoc.id), {
+        views: increment(1)
+      });
+    } catch (error) {
+      console.error("Failed to increment views:", error);
+    }
 
-      // কন্টেন্ট ইনজেক্ট করা
-      if(articleContent) {
-          articleContent.innerHTML = `
-            <h1>${data.title}</h1>
-            <p class="meta">
-              <span class="badge ${badgeClass}">${data.category.toUpperCase()}</span>
-              <span class="subject">${data.subject}</span>
-              <span class="date">${formatDate(data.createdAt)}</span>
-            </p>
-            <img src="${data.image}" alt="${data.title}" style="max-width:100%; border-radius:20px; margin: 20px 0;">
-            <div id="article-body">${data.content}</div>
-          `;
-      }
+    const allSnap = await getDocs(collection(window.db, "articles"));
+    const allArticles = allSnap.docs.map((docSnap) => ({
+      id: docSnap.id,
+      data: docSnap.data()
+    }));
 
-      // MathJax রেন্ডারিং (যদি ম্যাথ ইকুয়েশন থাকে)
-      if (window.MathJax) {
-        MathJax.typesetPromise([document.getElementById("article-body")]);
-      }
-    });
-
-  } catch (err) {
-    if(articleContent) articleContent.innerHTML = `<p>Error loading article: ${err.message}</p>`;
-    console.error(err);
+    renderRelatedArticles(allArticles, currentDoc.id, currentData.category);
+  } catch (error) {
+    if (articleContent) {
+      articleContent.innerHTML = `<p>Error loading article: ${error.message}</p>`;
+    }
+    console.error(error);
   }
 }
 
-// পেজ লোড হলে ফাংশনগুলো রান করবে
 window.addEventListener("DOMContentLoaded", () => {
-    loadArticle();
-    initMobileMenu();
+  initMobileMenu();
+  loadArticle();
 });
