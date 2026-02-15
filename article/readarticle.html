@@ -6,11 +6,10 @@
   <title>Read Article</title>
 
   <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="readarticle.css" />
 </head>
 
 <body>
-
-  <!-- ================= HEADER ================= -->
   <header>
     <nav class="navbar">
       <div class="logo">
@@ -25,45 +24,26 @@
     </nav>
   </header>
 
-
-  <!-- ================= MAIN ARTICLE ================= -->
   <main class="container">
-
-    <div id="articleContainer" class="single-article">
+    <div id="articleContent" class="single-article">
       <p>Loading article...</p>
     </div>
 
-    <!-- ================= RELATED ARTICLES ================= -->
     <section class="related-section">
-      <h2>Latest Articles</h2>
+      <h2>Same Category Articles</h2>
       <div id="relatedArticles" class="article-grid"></div>
     </section>
-
   </main>
 
-
-  <!-- ================= FOOTER ================= -->
   <footer>
     <p>© 2026 Board. All rights reserved.</p>
   </footer>
 
-
-  <!-- ================= FIREBASE INIT ================= -->
   <script type="module" src="firebase.js"></script>
-
-
-  <!-- ================= READ ARTICLE SCRIPT ================= -->
   <script type="module" src="readarticle.js"></script>
 
-</body>
-</html>
-<script type="module" src="firebase.js"></script>
-<script type="module" src="readarticle.js"></script>
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
-
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>
