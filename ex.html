@@ -48,27 +48,21 @@
     }
 </style>
 <script>
+    // Page load hobar 3 second por popup dekhabe
     window.onload = function() {
-        // Check korchi agei eita dekhano hoyeche kina
-        if (!sessionStorage.getItem('popupShown')) {
+        setTimeout(function() {
+            // CSS e default 'display: none' thakbe
+            document.getElementById('customPopup').style.display = 'flex';
+        }, 3000);
+
+        // Cross icon click handler
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            // Popup-ti bondho hobe
+            document.getElementById('customPopup').style.display = 'none';
             
-            // 3 second (3000ms) por popup dekhabe
-            setTimeout(function() {
-                document.getElementById('customPopup').style.display = 'flex';
-            }, 3000);
-
-            // Cross button e click korle ki hobe
-            document.getElementById('closeBtn').addEventListener('click', function() {
-                // Popup bondho korbe
-                document.getElementById('customPopup').style.display = 'none';
-                
-                // Session e save korbe jate ar na ashe
-                sessionStorage.setItem('popupShown', 'true');
-
-                // Notun link open korbe
-                window.open('https://yourlink.com', '_blank'); 
-            });
-        }
+            // Notun tab-e link open hobe
+            window.open('https://yourlink.com', '_blank'); 
+        });
     };
 </script>
 </body>
