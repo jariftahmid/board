@@ -140,7 +140,7 @@ async function initFCM() {
 
       new Notification(title, {
         body: body,
-        icon: image || "/favicon.ico"
+        icon: image || "/favicon.png"
       });
     });
 
@@ -166,7 +166,7 @@ async function enableNotifications() {
     }
 
     const token = await getToken(messaging, {
-      vapidKey: "YOUR_VAPID_KEY",
+      vapidKey: "BEX_bbKtIXnvoR80dpVXP7p2Lfskr4pJuG0WZx6vRwOGgJX0wORB2y5AoUFqiiUsnpAcNGN7nLC1IVSZek7qEk4",
       serviceWorkerRegistration: swRegistration
     });
 
