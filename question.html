@@ -3,37 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoardQues | Board Question Bank</title>
+    <title>Search SSC & HSC Board Questions | BoardQues Bank</title>
+    <meta name="description" content="Easily search and find previous years' SSC and HSC board question papers for all subjects and education boards in Bangladesh.">
+    
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="question.css">
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6552590139097792"
-     crossorigin="anonymous"></script>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6552590139097792" crossorigin="anonymous"></script>
 
+    <style>
+        .page-intro { max-width: 800px; margin: 40px auto; text-align: center; }
+        .page-intro h1 { color: #1e293b; margin-bottom: 10px; }
+        .page-intro p { color: #64748b; font-size: 1.1rem; }
+    </style>
 </head>
 <body>
 
     <nav class="navbar">
-    <div class="logo">BoardQues</div>
-    
-    <div class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-
-    <ul class="nav-links">
-        <li class="center"><a href="index.html">Home</a></li>
-        <li class="center"><a href="question.html" id="home-nav">Questions</a></li>
-        <li class="center"><a href="article/article.html">Articles</a></li>
-        <li class="center"><a href="teacher.html">Teacher's Corner</a></li>
-        <li class="center"><a href="about-us.html">About Us</a></li>
-    </ul>
-</nav>
+        <div class="logo">BoardQues</div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="question.html" class="active">Questions</a></li>
+            <li><a href="article/article.html">Articles</a></li>
+            <li><a href="teacher.html">Teacher's Corner</a></li>
+            <li><a href="about-us.html">About Us</a></li>
+        </ul>
+    </nav>
 
     <main class="main-content">
-        <aside class="search-sidebar" id="search-section">
+        <section class="page-intro">
+            <h1>Board Question Bank</h1>
+            <p>Select your exam, subject, board, and year to instantly access the official question papers. This tool is designed to help students practice effectively for upcoming board examinations.</p>
+        </section>
+
+        <aside class="search-sidebar" id="search-section" style="max-width: 500px; margin: 0 auto 50px;">
             <h2 class="section-title">Question Search</h2>
             <form id="redirectForm">
                 <div class="form-group">
@@ -93,56 +101,44 @@
         </aside>
     </main>
 
-<footer>
-    <a href="/about-us.html">About Us</a> | 
-    <a href="/contact-us.html">Contact Us</a> | 
-    <a href="/privacy-policy.html">Privacy Policy</a>
-    <p>© 2026 BoardQues. All rights reserved.</p>
-</footer>
-<script type="module" src="script.js"></script>
+    <footer>
+        <div class="footer-links">
+            <a href="about-us.html">About Us</a> | 
+            <a href="contact-us.html">Contact Us</a> | 
+            <a href="privacy-policy.html">Privacy Policy</a> |
+            <a href="disclaimer.html">Disclaimer</a>
+        </div>
+        <p>© 2026 BoardQues. All rights reserved.</p>
+    </footer>
 
     <script>
-        // ড্রপডাউন হ্যান্ডলিং
+        // আপনার আগের স্ক্রিপ্টগুলো এখানে থাকবে
         document.querySelectorAll('.custom-select').forEach(select => {
             const trigger = select.querySelector('.select-trigger');
             const options = select.querySelectorAll('.option');
             const hiddenInput = select.parentElement.querySelector('input[type="hidden"]');
-
             trigger.addEventListener('click', () => {
-                document.querySelectorAll('.custom-select').forEach(other => {
-                    if (other !== select) other.classList.remove('open');
-                });
+                document.querySelectorAll('.custom-select').forEach(other => { if (other !== select) other.classList.remove('open'); });
                 select.classList.toggle('open');
             });
-
             options.forEach(opt => {
                 opt.addEventListener('click', () => {
                     trigger.querySelector('span').innerText = opt.innerText;
                     hiddenInput.value = opt.dataset.value;
                     select.classList.remove('open');
-                    options.forEach(o => o.classList.remove('selected'));
-                    opt.classList.add('selected');
                 });
             });
         });
 
-        // অন্য পেজে রিডাইরেক্ট করা
         document.getElementById('redirectForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const exam = document.getElementById('exam').value;
             const subject = document.getElementById('subject').value;
             const board = document.getElementById('board').value;
             const year = document.getElementById('year').value;
-
-            if (!exam || !subject || !board || !year) {
-                alert("Please select all fields!");
-                return;
-            }
-
-            const queryParams = `exam=${exam}&subject=${subject}&board=${board}&year=${year}`;
-            window.location.href = `displayques.html?${queryParams}`; 
+            if (!exam || !subject || !board || !year) { alert("Please select all fields!"); return; }
+            window.location.href = `displayques.html?exam=${exam}&subject=${subject}&board=${board}&year=${year}`; 
         });
     </script>
 </body>
 </html>
-

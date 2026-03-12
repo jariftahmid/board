@@ -1,121 +1,100 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher's Corner | Board Question Bank</title> 
+    <title>Teacher's Corner | Video Tutorials & Study Notes | BoardQues</title>
+    <meta name="description" content="Explore Teacher's Corner at BoardQues for curated video tutorials, expert study notes, and exam guidance for SSC and HSC students in Bangladesh.">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="teacher.css">
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6552590139097792"
-     crossorigin="anonymous"></script>
-
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6552590139097792" crossorigin="anonymous"></script>
 </head>
 <body>
-    <nav class="navbar">
-    <div class="logo">BoardQues</div>
     
-    <div class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
+    <nav class="navbar">
+        <div class="logo">BoardQues</div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="question.html">Questions</a></li>
+            <li><a href="article/article.html">Articles</a></li>
+            <li><a href="teacher.html" class="active">Teacher's Corner</a></li>
+            <li><a href="about-us.html">About Us</a></li>
+        </ul>
+    </nav>
 
-    <ul class="nav-links">
-        <li class="center"><a href="index.html">Home</a></li>
-        <li class="center"><a href="question.html">Questions</a></li>
-        <li class="center"><a href="article/article.html">Articles</a></li>
-        <li class="center"><a href="teacher.html"  id="home-nav">Teacher's Corner</a></li>
-        <li class="center"><a href="about-us.html">About Us</a></li>
-    </ul>
-</nav>
     <div class="sidebar">
         <h2>Subjects</h2>
         <button onclick="showContent('bangla', this)" class="active">Bangla</button>
-        <button onclick="showContent('english1', this)">English 1st paper</button>
+        <button onclick="showContent('english1', this)">English 1st Paper</button>
         <button onclick="showContent('math', this)">Math</button>
         <button onclick="showContent('physics', this)">Physics</button>
         <button onclick="showContent('chemistry', this)">Chemistry</button>
         <button onclick="showContent('biology', this)">Biology</button>
         <button onclick="showContent('ict', this)">ICT</button>
-        <button onclick="showContent('bgs', this)">Bangladesh and global studies</button>
-        <button onclick="showContent('english2', this)">English 2nd paper</button>
+        <button onclick="showContent('bgs', this)">BGS</button>
+        <button onclick="showContent('english2', this)">English 2nd Paper</button>
     </div>
 
     <div class="main-content">
         <h1 id="subject-title" class="header-title">Bangla Classes</h1>
-        <div id="video-container" class="video-grid">
-            </div>
+        <div id="video-container" class="video-grid"></div>
     </div>
 
     <script>
-        // Data Structure for Subjects and Videos
         const subjects = {
-            bangla: {
-                title: "Bangla Classes",
-                videos: [
-                    { title: "Bangla 1st Paper - Porichiti", id: "https://www.youtube.com/embed/dQw4w9WgXcQ" }, // Replace with real Video IDs
-                    { title: "Bangla Grammar - Shondhi", id: "https://www.youtube.com/embed/30vHn7E7uS0" }
-                ]
-            },
-            english1: {
-                title: "English 1st paper Classes",
-                videos: [
-                    { title: "Tense Mastery", id: "https://www.youtube.com/embed/847V_pS8iio" },
-                    { title: "Sentence Structure", id: "https://www.youtube.com/embed/uY_R96_T_6k" }
-                ]
-            },
-            math: {
-                title: "Math Classes",
-                videos: [
-                    { title: "Algebra Basics", id: "https://www.youtube.com/embed/NybHck1Va0U" },
-                    { title: "Geometry - Circle", id: "https://www.youtube.com/embed/O_6IunG_P_k" }
-                ]
-            },
-            physics: {
-                title: "Physics",
-                videos: [
-                    { title: "Vouto porimap", id: "https://www.youtube.com/embed/847V_pS8iio" },
-                    { title: "Alor protisoron", id: "https://www.youtube.com/embed/847V_pS8iio" },
-                ]
-            }
+            bangla: { title: "Bangla Classes", videos: [{ title: "Bangla 1st Paper Introduction", id: "https://www.youtube.com/embed/dQw4w9WgXcQ" }, { title: "Bangla Grammar - Shondhi", id: "https://www.youtube.com/embed/30vHn7E7uS0" }] },
+            english1: { title: "English 1st Paper", videos: [{ title: "Tense Mastery", id: "https://www.youtube.com/embed/847V_pS8iio" }] },
+            math: { title: "Mathematics", videos: [{ title: "Algebra Basics", id: "https://www.youtube.com/embed/NybHck1Va0U" }] },
+            physics: { title: "Physics", videos: [{ title: "Measurements", id: "https://www.youtube.com/embed/847V_pS8iio" }] },
+            chemistry: { title: "Chemistry", videos: [] },
+            biology: { title: "Biology", videos: [] },
+            ict: { title: "ICT", videos: [] },
+            bgs: { title: "BGS", videos: [] },
+            english2: { title: "English 2nd Paper", videos: [] }
         };
 
         function showContent(subjectKey, btn) {
-            // Update Active Button
             const buttons = document.querySelectorAll('.sidebar button');
             buttons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Update Content
             const subject = subjects[subjectKey];
             document.getElementById('subject-title').innerText = subject.title;
-            
             const container = document.getElementById('video-container');
-            container.innerHTML = ""; // Clear old videos
+            container.innerHTML = "";
 
-            subject.videos.forEach(video => {
-                const card = `
-                    <div class="video-card">
-                        <iframe src="${video.id}" allowfullscreen></iframe>
-                        <h3>${video.title}</h3>
-                    </div>
-                `;
-                container.innerHTML += card;
-            });
+            if (subject.videos.length > 0) {
+                subject.videos.forEach(video => {
+                    container.innerHTML += `
+                        <div class="video-card">
+                            <iframe src="${video.id}" allowfullscreen title="${video.title}"></iframe>
+                            <h3>${video.title}</h3>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = "<p>New video content for this subject is coming soon. Stay tuned!</p>";
+            }
         }
 
-        // Load Bangla by default
-        window.onload = () => {
-            showContent('bangla', document.querySelector('.sidebar button'));
-        };
+        window.onload = () => showContent('bangla', document.querySelector('.sidebar button'));
     </script>
-<footer>
-    <a href="/about-us.html">About Us</a> | 
-    <a href="/contact-us.html">Contact Us</a> | 
-    <a href="/privacy-policy.html">Privacy Policy</a>
-    <p>© 2026 BoardQues. All rights reserved.</p>
-</footer>
+
+    <footer>
+        <div class="footer-links">
+            <a href="about-us.html">About Us</a> | 
+            <a href="contact-us.html">Contact Us</a> | 
+            <a href="privacy-policy.html">Privacy Policy</a> |
+            <a href="disclaimer.html">Disclaimer</a>
+        </div>
+        <p>© 2026 BoardQues. All rights reserved.</p>
+    </footer>
 </body>
 </html>

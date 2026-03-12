@@ -1,174 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoardQues | Board Question Bank</title>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BoardQues | Best Board Question Bank & Study Resources for SSC & HSC</title>
+    
+    <meta name="description" content="BoardQues provides the most reliable collection of SSC and HSC board questions, well-explained solutions, and academic articles to help students excel in their exams.">
+    <meta name="keywords" content="Board Questions, SSC Board Question, HSC Board Question, Study Notes, BoardQues, Academic Resources, Exam Suggestion">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="article/article.css">
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6552590139097792"
-     crossorigin="anonymous"></script>
-    <!-- 🔔 Firebase SDKs (FCM needs these) -->
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6552590139097792" crossorigin="anonymous"></script>
+
     <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js" type="module"></script>
     <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js" type="module"></script>
-
 </head>
 <body>
-<!-- Navbar -->
+
 <nav class="navbar">
-    <div class="logo"><img src="favicon.png" alt="">BoardQues</div>
-
+    <div class="logo"><img src="favicon.png" alt="BoardQues Logo">BoardQues</div>
     <div class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </div>
-
     <ul class="nav-links">
-        <li class="center"><a href="index.html" id="home-nav">Home</a></li>
-        <li class="center"><a href="question.html">Questions</a></li>
-        <li class="center"><a href="article/article.html">Articles</a></li>
-        <li class="center"><a href="teacher.html">Teacher's Corner</a></li>
-        <li class="center"><a href="about-us.html">About Us</a></li>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="question.html">Questions</a></li>
+        <li><a href="article/article.html">Articles</a></li>
+        <li><a href="teacher.html">Teacher's Corner</a></li>
+        <li><a href="about-us.html">About Us</a></li>
     </ul>
 </nav>
 
-<!-- Hero Section -->
 <header class="hero">
     <div class="hero-content">
-        <h1>
-            Study Less Confused,<br>
-            <span class="highlight">Score More Confident.</span>
-        </h1>
-
-        <p>
-            Dedicated to empowering SSC and HSC students with reliable board questions,
-            well-explained solutions, and concept-based articles for long-term academic success.
-        </p>
-
-        <button class="btn-primary" id="scroll-to-search">
-            Browse Questions
-        </button>
-
-        <!-- 🔔 Enable Notification Button -->
-        <button class="btn-primary" id="enableNotificationBtn" style="margin-top:12px;">
-            🔔 Enable Article Notifications
-        </button>
+        <h1>Study Less Confused, <span class="highlight">Score More Confident.</span></h1>
+        <p>BoardQues is a premier digital learning platform for Bangladeshi students. We offer comprehensive access to previous years' board questions, expert-verified solutions, and insightful study articles designed to simplify complex concepts and improve exam performance.</p>
+        <button class="btn-primary" id="scroll-to-search">Browse Questions</button>
+        <button class="btn-primary" id="enableNotificationBtn" style="margin-top:12px; background: #e11d48;">🔔 Get Study Alerts</button>
     </div>
-
     <div class="hero-image">
-        <img src="default.png" alt="Students Studying">
+        <img src="default.png" alt="Students preparing for board exams with BoardQues resources">
     </div>
 </header>
 
-<!-- Popular Articles -->
+
+
 <main class="articles" id="articles-section">
     <div class="section-header">
         <h2 class="section-title">Popular Articles</h2>
         <a href="article/article.html" class="view-all">View All Articles</a>
     </div>
-
     <div class="article-grid" id="articleGrid"></div>
 </main>
 
-<!-- Why Choose Us -->
 <section class="why-us">
-    <h2 class="section-title">Why Choose Us?</h2>
+    <h2 class="section-title">Why Students Trust BoardQues?</h2>
     <div class="why-grid">
         <div class="why-card">
             <h3>📘 Board Focused</h3>
-            <p>SSC ও HSC বোর্ড পরীক্ষার জন্য আলাদা করে প্রস্তুত কনটেন্ট।</p>
+            <p>Curated collections of SSC and HSC board questions to match the exact examination pattern.</p>
         </div>
         <div class="why-card">
             <h3>🎯 Exam Oriented</h3>
-            <p>পরীক্ষায় সরাসরি কাজে লাগবে এমন প্রশ্ন ও নোট।</p>
+            <p>Targeted study materials and suggestions that help you focus on high-yield exam topics.</p>
         </div>
         <div class="why-card">
             <h3>👨‍🎓 Student Friendly</h3>
-            <p>সহজ ভাষায় ব্যাখ্যা, যেন সবাই বুঝতে পারে।</p>
+            <p>Easy-to-understand explanations and notes that break down difficult academic concepts.</p>
         </div>
         <div class="why-card">
             <h3>🆓 100% Free</h3>
-            <p>কোনো সাবস্ক্রিপশন ছাড়াই সম্পূর্ণ ফ্রি।</p>
+            <p>All our educational resources are completely free, ensuring quality learning for every student.</p>
         </div>
     </div>
 </section>
 
-<!-- Search -->
 <section class="search-section">
-    <h2 class="section-title">Search Questions & Articles</h2>
-    <input
-        type="text"
-        id="searchInput"
-        class="search-box"
-        placeholder="Search by subject, chapter or topic..."
-    >
+    <h2 class="section-title">Find Your Resource</h2>
+    <p>Search through our extensive database by subject, chapter, or year.</p>
+    <input type="text" id="searchInput" class="search-box" placeholder="e.g., Physics Chapter 3, SSC 2025...">
 </section>
 
-<!-- Latest Updates -->
-<section class="updates">
-    <h2 class="section-title">Latest Updates</h2>
-    <ul class="update-list">
-        <li>🔔 HSC Physics Chapter 3 Suggestion Added</li>
-        <li>🔔 SSC Math Short Notes Uploaded</li>
-        <li>🔔 New English Grammar Article Published</li>
-    </ul>
-</section>
-
-<!-- Teacher’s Corner -->
-<section class="teachers-corner">
-    <h2 class="section-title">Teacher's Corner</h2>
-    <p class="coming-soon">
-        অভিজ্ঞ শিক্ষকদের নোট, ট্রিকস ও সাজেশন খুব শীঘ্রই আসছে...
-    </p>
-</section>
-
-<!-- Statistics -->
-<section class="stats">
-    <div class="stat-card">
-        <h3>📄 500+</h3>
-        <p>Board Questions</p>
-    </div>
-    <div class="stat-card">
-        <h3>🧠 100+</h3>
-        <p>Articles</p>
-    </div>
-    <div class="stat-card">
-        <h3>🎓 10,000+</h3>
-        <p>Students Helped</p>
-    </div>
-    <div class="stat-card">
-        <h3>⏱ Weekly</h3>
-        <p>Updated</p>
-    </div>
-</section>
-
-<!-- Footer -->
 <footer>
-    <a href="/about-us.html">About Us</a> | 
-    <a href="/contact-us.html">Contact Us</a> | 
-    <a href="/privacy-policy.html">Privacy Policy</a>
-    <p>© 2026 BoardQues. All rights reserved.</p>
+    <div class="footer-links" style="margin-bottom: 10px;">
+        <a href="about-us.html">About Us</a> | 
+        <a href="contact-us.html">Contact Us</a> | 
+        <a href="privacy-policy.html">Privacy Policy</a> |
+        <a href="disclaimer.html">Disclaimer</a>
+    </div>
+    <p>© 2026 BoardQues. All rights reserved. Empowering students through digital learning.</p>
 </footer>
 
-<!-- 🔔 Service Worker Register (REQUIRED for FCM) -->
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/firebase-messaging-sw.js')
-            .then(() => console.log('Service Worker Registered'))
             .catch(err => console.error('SW registration failed', err));
     }
 </script>
 
-<!-- Firebase + Article JS -->
 <script type="module" src="article/firebase.js"></script>
 <script type="module" src="script.js"></script>
 
 </body>
 </html>
-
-
-

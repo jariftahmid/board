@@ -4,153 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BoardQues | Board Question Bank</title>
+    <meta name="description" content="Download and view official board question papers for SSC and HSC exams in Bangladesh.">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="question.css">
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6552590139097792"
-     crossorigin="anonymous"></script>
-
-</head>
-<body>
-
-    <nav class="navbar">
-    <div class="logo">BoardQues</div>
-    
-    <div class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-
-    <ul class="nav-links">
-        <li class="center"><a href="index.html">Home</a></li>
-        <li class="center"><a href="question.html" id="home-nav">Questions</a></li>
-        <li class="center"><a href="article/article.html">Articles</a></li>
-        <li class="center"><a href="teacher.html">Teacher's Corner</a></li>
-        <li class="center"><a href="about-us.html">About Us</a></li>
-    </ul>
-</nav>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6552590139097792" crossorigin="anonymous"></script>
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #f9f9f9;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 850px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-        .error-box {
-            padding: 40px 20px;
-        }
-        .error-box h2 {
-            text-transform: uppercase;
-            font-size: 26px;
-            margin-bottom: 8px;
-        }
-        .error-box p {
-            font-size: 18px;
-            color: #666;
-        }
-        .q-img {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 1px solid #eee;
-        }
-        h1.title {
-            font-size: 22px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #0984e3;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-        h3 {
-            text-align: left;
-            color: #0984e3;
-            margin-top: 30px;
-        }
-        .loading {
-            font-size: 18px;
-            color: #888;
-            margin-top: 50px;
-        }
+        body { font-family: 'Outfit', sans-serif; background: #f9f9f9; padding: 20px; text-align: center; }
+        .container { max-width: 850px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .q-img { width: 100%; border-radius: 10px; margin-bottom: 25px; border: 1px solid #eee; }
+        .content-note { padding: 20px; background: #f0f7ff; border-radius: 10px; margin-bottom: 20px; text-align: left; }
+        footer { margin-top: 40px; padding: 20px; background: #fff; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
 
-<div class="container" id="main-container">
-    <div class="loading">Searching for question...</div>
-</div>
+    <nav class="navbar">
+        <div class="logo">BoardQues</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="question.html">Questions</a></li>
+            <li><a href="article/article.html">Articles</a></li>
+            <li><a href="teacher.html">Teacher's Corner</a></li>
+            <li><a href="about-us.html">About Us</a></li>
+        </ul>
+    </nav>
+
+    <div class="container" id="main-container">
+        <div class="loading">Searching for question...</div>
+    </div>
 
 <script>
-    // 1️⃣ URL params
     const params = new URLSearchParams(window.location.search);
-    const exam = params.get("exam");      // ssc
-    const subject = params.get("subject"); // bangla / physics
-    const year = params.get("year");      // 2025
-    const board = params.get("board")     // dhaka 
+    const exam = params.get("exam") || "exam";
+    const subject = params.get("subject") || "subject";
+    const year = params.get("year") || "2026";
+    const board = params.get("board") || "board";
 
-    // 2️⃣ GitHub config (FINAL)
     const username = "jariftahmid";
     const repo = `bq${year}`;
     const baseURL = `https://raw.githubusercontent.com/${username}/${repo}/main/${exam}/${board}/`;
-
     const container = document.getElementById("main-container");
 
-    // 3️⃣ Error UI
-    function showNotAvailable() {
-        container.innerHTML = `
-            <div class="error-box">
-                <h2>${exam.toUpperCase()} ${year} ${subject.toUpperCase()}</h2>
-                <p>Sorry, question not available</p>
-                <br>
-                <a href="question.html" style="color:#0984e3;font-weight:600;">← Go Back</a>
-            </div>
-        `;
-    }
-
-    // 4️⃣ Load images
     async function loadQuestions() {
         try {
             const testImage = `${baseURL}/${subject}1.jpg`;
             const res = await fetch(testImage);
-
-            if (!res.ok) return showNotAvailable();
+            if (!res.ok) throw new Error("Not found");
 
             container.innerHTML = `
-                <h1 class="title">${exam.toUpperCase()} ${year} - ${subject.toUpperCase()}</h1>
-
-                <h3>Questions</h3>
-                <img src="${baseURL}/${subject}1.jpg" class="q-img" onerror="this.style.display='none'">
-                <img src="${baseURL}/${subject}2.jpg" class="q-img" onerror="this.style.display='none'">
-                <img src="${baseURL}/${subject}3.jpg" class="q-img" onerror="this.style.display='none'">
-                <img src="${baseURL}/${subject}4.jpg" class="q-img" onerror="this.style.display='none'">
-                <a href="question.html">Search More</a>
+                <h1 class="title">${exam.toUpperCase()} ${year} - ${subject.toUpperCase()} Board Question</h1>
+                <div class="content-note">
+                    <h3>About this Question Paper</h3>
+                    <p>This is the official ${exam.toUpperCase()} ${year} examination paper for ${subject.toUpperCase()}. 
+                    Practicing these previous year questions is highly recommended to understand the board exam format, 
+                    time management, and important topics. Use these resources to boost your preparation.</p>
+                </div>
+                <h3>Question Images</h3>
+                <img src="${baseURL}/${subject}1.jpg" class="q-img" alt="Question Paper Page 1">
+                <img src="${baseURL}/${subject}2.jpg" class="q-img" alt="Question Paper Page 2">
+                <img src="${baseURL}/${subject}3.jpg" class="q-img" alt="Question Paper Page 3">
+                <img src="${baseURL}/${subject}4.jpg" class="q-img" alt="Question Paper Page 4">
             `;
         } catch {
-            showNotAvailable();
+            container.innerHTML = `<div><h2>Question Not Available</h2><a href="question.html">Go Back</a></div>`;
         }
     }
 
-    // 5️⃣ Init
-    if (exam && subject && year) {
-        loadQuestions();
-    } else {
-        container.innerHTML = "<h2>Invalid Request</h2>";
-    }
+    if (params.get("exam")) loadQuestions();
+    else container.innerHTML = "<h2>Invalid Request</h2>";
 </script>
+
 <footer>
-    <a href="/about-us.html">About Us</a> | 
-    <a href="/contact-us.html">Contact Us</a> | 
-    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="about-us.html">About Us</a> | 
+    <a href="contact-us.html">Contact Us</a> | 
+    <a href="privacy-policy.html">Privacy Policy</a>
     <p>© 2026 BoardQues. All rights reserved.</p>
 </footer>
+
 </body>
 </html>
