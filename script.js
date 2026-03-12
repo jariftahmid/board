@@ -211,22 +211,28 @@ function initMobileMenu() {
 
 
 /* ===========================
-    🚀 INIT
+    🚀 UPDATED INIT
 =========================== */
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => { // DOMContentLoaded এর বদলে load ব্যবহার করুন
+    initMobileMenu();
+    loadArticles();
+    initFCM(); 
+  
+    // বাটনের ইভেন্টগুলো বাটন এক্সিস্ট করলে সেট হবে
+    const scrollBtn = document.getElementById("scroll-to-search");
+    if (scrollBtn) {
+        scrollBtn.onclick = () => {
+            // প্রশ্ন সেকশনে স্ক্রল করার জন্য
+            document.querySelector('.search-section').scrollIntoView({ behavior: 'smooth' });
+        };
+    }
 
-  initMobileMenu();
-  loadArticles();
-  initFCM();
-
-  if (scrollBtn) {
-    scrollBtn.onclick = () => window.location.href = "question.html";
-  }
-
-  if (enableNotificationBtn) {
-    enableNotificationBtn.onclick = enableNotifications;
-  }
-});/* ===========================
+    const enableNotificationBtn = document.getElementById("enableNotificationBtn");
+    if (enableNotificationBtn) {
+        enableNotificationBtn.onclick = enableNotifications;
+    }
+});
+/* ===========================
     🔥 LOAD ARTICLES (MAX 2)
 =========================== */
 async function loadArticles() {

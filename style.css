@@ -325,30 +325,26 @@ a {
 }
 
 /* Responsive Media Query */
+/* আপনার মিডিয়া কোয়েরির ভেতরে এটি আপডেট করুন */
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: flex; /* মোবাইলে হ্যামবার্গার আইকন দেখাবে */
-        z-index: 1001;
-    }
-
     .nav-links {
+        display: flex; /* এটি ঠিক আছে */
         position: fixed;
         top: 0;
-        right: -100%; /* শুরুতে স্ক্রিনের বাইরে থাকবে */
-        height: 100vh;
+        right: -100%; /* শুরুতে বাইরে */
         width: 70%;
+        height: 100vh;
         background: white;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
-        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-        display: flex; /* মোবাইলেও ফ্লেক্স দেখাবে */
+        transition: 0.5s ease-in-out;
+        z-index: 999; /* মেনু যেন উপরে থাকে */
     }
 
     .nav-links.active {
-        right: 0; /* মেনু ওপেন হলে স্ক্রিনে আসবে */
+        right: 0; /* মেনু ওপেন হলে ভেতরে আসবে */
     }
+
 
     /* হ্যামবার্গার এনিমেশন */
     #mobile-menu.is-active .bar:nth-child(2) { opacity: 0; }
