@@ -191,16 +191,22 @@ async function enableNotifications() {
     📱 MOBILE MENU
 =========================== */
 function initMobileMenu() {
-
   const menu = document.querySelector("#mobile-menu");
   const menuLinks = document.querySelector(".nav-links");
 
   if (!menu || !menuLinks) return;
 
-  menu.onclick = () => {
+  menu.addEventListener("click", () => {
     menu.classList.toggle("is-active");
     menuLinks.classList.toggle("active");
-  };
+  });
+
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("is-active");
+      menuLinks.classList.remove("active");
+    });
+  });
 }
 
 
