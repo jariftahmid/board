@@ -35,7 +35,7 @@ async function loadArticles() {
   articleGrid.innerHTML = "<p>Loading articles...</p>";
 
   try {
-    const q = query(collection(window.db, "articles"), orderBy("views", "desc"), limit(2));
+    const q = query(collection(window.db, "articles"), orderBy("views", "desc"), limit(4));
     const snapshot = await getDocs(q);
     articleGrid.innerHTML = "";
 
