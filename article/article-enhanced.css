@@ -1,0 +1,27 @@
+.page-header {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f9fafb;
+}
+
+.browse-by-category {
+    padding: 40px 20px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.category-card {
+    background: #f1f5f9;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    background: #e2e8f0;
+}
