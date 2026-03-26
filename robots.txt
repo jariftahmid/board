@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://boardques.vercel.app/sitemap.xml
+Sitemap: https://www.boardques.com/sitemap.xml

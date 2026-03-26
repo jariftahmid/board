@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://boardques.vercel.app/index.html</loc>
-    <lastmod>2024-05-22</lastmod>
-    <priority>1.0</priority>
+    <loc>https://www.boardques.com/</loc>
+    <lastmod>2024-07-28</lastmod>
+    <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://boardques.vercel.app/question.html</loc>
-    <lastmod>2024-05-22</lastmod>
-    <priority>0.8</priority>
+    <loc>https://www.boardques.com/question.html</loc>
+    <lastmod>2024-07-28</lastmod>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://boardques.vercel.app/article/article.html</loc>
-    <lastmod>2024-05-22</lastmod>
-    <priority>0.8</priority>
+    <loc>https://www.boardques.com/article/article.html</loc>
+    <lastmod>2024-07-28</lastmod>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://boardques.vercel.app/about-us.html</loc>
-    <lastmod>2024-05-22</lastmod>
-    <priority>0.5</priority>
+    <loc>https://www.boardques.com/teacher.html</loc>
+    <lastmod>2024-07-28</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.boardques.com/about-us.html</loc>
+    <lastmod>2024-07-28</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.boardques.com/contact-us.html</loc>
+    <lastmod>2024-07-28</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.boardques.com/privacy-policy.html</loc>
+    <lastmod>2024-07-28</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.boardques.com/disclaimer.html</loc>
+    <lastmod>2024-07-28</lastmod>
+    <priority>0.80</priority>
   </url>
 </urlset>
