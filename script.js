@@ -117,7 +117,7 @@ function initMobileMenu() {
   const menuLinks = document.querySelector(".nav-links");
   const overlay = document.querySelector(".overlay"); // আপনার নতুন ওভারলে
 
-  if (!menu || !menuLinks) return;
+  if (!menu || !menuLinks || menu.dataset.menuBound === "true") return;
 
   menu.onclick = () => {
     menu.classList.toggle("is-active");
